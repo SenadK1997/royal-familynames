@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,19 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::get('/', function() {
+    return view ('LandingPage');
 });
+
+// Show registration form and handle registration
+Route::get('/register', [AdminController::class, 'showRegistrationForm'])->name('registration');
+Route::post('/register', [AdminController::class, 'register'])->name('register');
+
+// Show login form and handle login
+Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');
+Route::post('/login', [AdminController::class, 'login']);
+
+// Logout
+Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
+
+Route::get('/account/{account_id}', [AdminController::class, 'myAccount'])->name('myAccount');
