@@ -28,7 +28,20 @@
           <div class="flex items-center gap-x-4 sm:gap-x-6">
             <button type="button" class="hidden text-sm font-semibold leading-6 text-gray-900 sm:block">Copy URL</button>
             <a href="#" class="hidden text-sm font-semibold leading-6 text-gray-900 sm:block">Edit</a>
-            <a href="#" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register my family name</a>
+            {{-- <div class="flex flex-col items-center">
+              <button class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600" id="toggleButton">Register to existing family name</button>
+              <div id="otherFileContent" class="hidden">
+                @include('partials.existing-family-names')
+              </div>
+            </div> --}}
+            <div class="flex flex-col items-center relative">
+              <button class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600" id="toggleButton">Register to existing family name</button>
+              <div id="otherFileContent" class="hidden absolute top-full left-0 w-full z-10 p-4 bg-white shadow-md">
+                  {{-- @include('partials.existing-family-names') --}}
+                  @include('partials.existing-family-names')
+              </div>
+            </div>
+            <a href="/register/family" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register new family name</a>
   
             <div class="relative sm:hidden">
               <button type="button" class="-m-3 block p-3" id="more-menu-button" aria-expanded="false" aria-haspopup="true">
@@ -436,3 +449,15 @@
   </main>
   
 @endsection
+@push('script')
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toggleButton = document.getElementById("toggleButton");
+      const otherFileContent = document.getElementById("otherFileContent"); // Assuming you have an element for the other Blade file content
+
+      toggleButton.addEventListener("click", function () {
+          otherFileContent.classList.toggle("hidden");
+      });
+    });
+  </script>
+@endpush

@@ -64,13 +64,22 @@ class AdminController extends Controller
     // Handle the login form submission
     public function login(Request $request)
     {
-        // Add your custom login logic here
+        $credentials = $request->only('email', 'password');
+
+        if (Auth::attempt($credentials)) {
+            // Authentication successful
+            $user = Auth::user();
+            return redirect()->route('myAccount', ['account_id' => $user->account_id]);
+        } 
+        return redirect()->route('login')
+        ->withErrors(['email' => 'Invalid username or password'])
+        ->withInput($request->except('password'));
     }
 
     // Handle user logout
     public function logout(Request $request)
     {
-        Auth::logout();
+        $request->session()->flush();
         return redirect('/');
     }
     public function myAccount($account_id)
@@ -81,5 +90,13 @@ class AdminController extends Controller
         } catch (ModelNotFoundException $exception) {
             return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
         }
+    }
+    public function showRegisterFamily()
+    {
+        return view('family.register');
+    }
+    public function registerFamily(Request $request)
+    {
+
     }
 }

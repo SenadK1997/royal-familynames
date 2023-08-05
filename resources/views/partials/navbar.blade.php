@@ -20,8 +20,12 @@
         <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
       </a>
       <div class="flex flex-1 justify-end">
-        <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
+        <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
         <a href="/register" class="text-sm font-semibold leading-6 text-gray-900">Register <span aria-hidden="true">&rarr;</span></a>
+        <form method="POST" action="{{ route('logout') }}">
+          @csrf
+          <button type="submit">Logout</button>
+        </form>
       </div>
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
@@ -54,4 +58,23 @@
       </div>
     </div>
   </header>
-  
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+    var logoutLink = document.getElementById('logout-link');
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function(event) {
+          console.log('adasd');
+            event.preventDefault();
+            var logoutUrl = this.getAttribute('data-url');
+            if (logoutUrl) {
+                // Create a form and submit it to perform the logout
+                var form = document.createElement('form');
+                form.action = logoutUrl;
+                form.method = 'POST';
+                document.body.appendChild(form);
+                form.submit();
+            }
+        });
+    }
+});
+  </script>
