@@ -2,7 +2,7 @@
     <nav class="mx-auto flex max-w-7xl items-center justify-between p-6 lg:px-8" aria-label="Global">
       <div class="flex flex-1">
         <div class="hidden lg:flex lg:gap-x-12">
-          <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Product</a>
+          <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Home</a>
           <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Features</a>
           <a href="#" class="text-sm font-semibold leading-6 text-gray-900">Company</a>
         </div>
@@ -19,14 +19,26 @@
         <span class="sr-only">Your Company</span>
         <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="">
       </a>
-      <div class="flex flex-1 justify-end">
-        <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">Log in <span aria-hidden="true">&rarr;</span></a>
-        <a href="/register" class="text-sm font-semibold leading-6 text-gray-900">Register <span aria-hidden="true">&rarr;</span></a>
-        <form method="POST" action="{{ route('logout') }}">
-          @csrf
-          <button type="submit">Logout</button>
-        </form>
+      @if (Auth::user())
+      <div class="relative inline-block text-left">
+        <svg class="cursor-pointer" id="user_button" stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024" height="2em" width="2em" xmlns="http://www.w3.org/2000/svg"><path d="M858.5 763.6a374 374 0 0 0-80.6-119.5 375.63 375.63 0 0 0-119.5-80.6c-.4-.2-.8-.3-1.2-.5C719.5 518 760 444.7 760 362c0-137-111-248-248-248S264 225 264 362c0 82.7 40.5 156 102.8 201.1-.4.2-.8.3-1.2.5-44.8 18.9-85 46-119.5 80.6a375.63 375.63 0 0 0-80.6 119.5A371.7 371.7 0 0 0 136 901.8a8 8 0 0 0 8 8.2h60c4.4 0 7.9-3.5 8-7.8 2-77.2 33-149.5 87.8-204.3 56.7-56.7 132-87.9 212.2-87.9s155.5 31.2 212.2 87.9C779 752.7 810 825 812 902.2c.1 4.4 3.6 7.8 8 7.8h60a8 8 0 0 0 8-8.2c-1-47.8-10.9-94.3-29.5-138.2zM512 534c-45.9 0-89.1-17.9-121.6-50.4S340 407.9 340 362c0-45.9 17.9-89.1 50.4-121.6S466.1 190 512 190s89.1 17.9 121.6 50.4S684 316.1 684 362c0 45.9-17.9 89.1-50.4 121.6S557.9 534 512 534z"></path>
+        </svg>
+        <div class="absolute right-0 z-10 mt-2 whitespace-nowrap min-w-full origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none hidden" role="menu" aria-orientation="vertical" aria-labelledby="user_button" tabindex="-1" id="menu-dropdown">
+          <div class="py-1" role="none">
+            <a href="{{ route('myAccount', ['account_id' => Auth::user()->account_id]) }}" class="text-gray-700 block px-4 py-2 text-sm" role="menuitem" tabindex="-1" id="menu-item-0">My Account</a>
+            <form method="POST" action="{{ route('logout') }}" class="text-gray-700 block px-4 py-2 text-sm">
+              @csrf
+              <button type="submit">Logout</button>
+            </form>
+          </div>
+        </div>
+      </div>  
+      @else        
+      <div class="flex flex-1 justify-end gap-x-5">
+        <a href="/login" class="text-sm font-semibold leading-6 text-gray-900">Log in</a>
+        <a href="/register" class="text-sm font-semibold leading-6 text-gray-900">Register</a>
       </div>
+      @endif
     </nav>
     <!-- Mobile menu, show/hide based on menu open state. -->
     <div class="lg:hidden" role="dialog" aria-modal="true">
@@ -58,7 +70,8 @@
       </div>
     </div>
   </header>
-  <script>
+
+  {{-- <script>
     document.addEventListener('DOMContentLoaded', function() {
     var logoutLink = document.getElementById('logout-link');
     if (logoutLink) {
@@ -77,4 +90,22 @@
         });
     }
 });
+  </script> --}}
+  <script>
+    const userButton = document.getElementById('user_button');
+    const menuDropdown = document.getElementById('menu-dropdown');
+  
+    userButton.addEventListener('click', function() {
+      menuDropdown.classList.toggle('hidden');
+      const expanded = userButton.getAttribute('aria-expanded');
+      userButton.setAttribute('aria-expanded', expanded === 'true' ? 'false' : 'true');
+    });
+  
+    // Close the dropdown when clicking outside
+    document.addEventListener('click', function(event) {
+      if (!menuDropdown.contains(event.target) && event.target !== userButton) {
+        menuDropdown.classList.add('hidden');
+        userButton.setAttribute('aria-expanded', 'false');
+      }
+    });
   </script>

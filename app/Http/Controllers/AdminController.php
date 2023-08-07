@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Familyname;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Http;
 
 class AdminController extends Controller
 {
@@ -93,10 +95,65 @@ class AdminController extends Controller
     }
     public function showRegisterFamily()
     {
-        return view('family.register');
+        $apiUrl = 'https://restcountries.com/v3.1/all';
+        $response = Http::get($apiUrl);
+        $countriesData = $response->json();
+        
+        $countries = [];
+        foreach ($countriesData as $country) {
+            $name = $country['name']['common'];
+            $countries[$name] = $name;
+        }
+        return view('family.register', compact('countries'));
     }
     public function registerFamily(Request $request)
     {
+        $user = Auth::user();
+        if ($user->familynames()->count() >= 2) {
+            return redirect()->back()->with('error', 'You can only register a maximum of 2 family names.');
+        }
+        $familyName = $request->input('family_name');
+        $country = $request->input('country');
+        $flag_url = $request->input('flag_url');
+        $valuation = $request->input('valuation');
 
+        $firstLetter = substr($familyName, 0, 1);
+
+        // Generate the consonants from the user's name
+        $consonants = preg_replace('/[aeiou\d]/i', '', $familyName);
+        // If the first letter is a vowel, remove it from the consonants
+        if (preg_match('/[aeiou\d]/i', $firstLetter)) {
+            $familyCodeName = $firstLetter . $consonants;
+        } else {
+            // If the first letter is a consonant, use it only once
+            $familyCodeName = $firstLetter . substr($consonants, 1);
+        }
+        // Generate a random six-digit number
+        $randomNumber = mt_rand(100000, 999999);
+
+        // Append the random number to the familyCode ID
+        $familyCodeName .= $randomNumber;
+
+        $family = new Familyname([
+            'family_name' => $familyName,
+            'country' => $country,
+            'flag_url' => $flag_url,
+            'valuation' => $valuation,
+            'family_code' => $familyCodeName
+        ]);
+
+        $family->save();
+        $user->familynames()->attach($family);
+        return redirect()->route('myAccount', ['account_id' => $user->account_id]);
+    }
+
+    public function showFamilyPage($family_code)
+    {
+        try {
+            $family = Familyname::where('family_code', $family_code)->firstOrFail();
+            return view('family/family-info', ['family_code' => $family_code], compact('family'));
+        } catch (ModelNotFoundException $exception) {
+            return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
+        }
     }
 }

@@ -45,6 +45,6 @@ class User extends Authenticatable
     ];
     public function familynames()
     {
-        return $this->belongsToMany(Familyname::class);
+        return $this->belongsToMany(Familyname::class, 'familyname_user');
     }
 }

@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('familynames', function (Blueprint $table) {
             $table->id();
             $table->string('family_name');
-            $table->string('city');
             $table->string('country');
+            $table->string('flag_url');
             $table->integer('valuation');
             $table->string('family_code')->unique();
             $table->timestamps();

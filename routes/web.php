@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
+use App\Models\Familyname;
 
 /*
 |--------------------------------------------------------------------------
@@ -15,7 +16,8 @@ use App\Http\Controllers\AdminController;
 */
 
 Route::get('/', function() {
-    return view ('LandingPage');
+    $familynames = Familyname::all();
+    return view ('LandingPage', compact('familynames'));
 });
 
 // Show registration form and handle registration
@@ -26,6 +28,10 @@ Route::post('/register', [AdminController::class, 'register'])->name('register')
 
 Route::get('/register/family', [AdminController::class, 'showRegisterFamily'])->name('family.registration')->middleware('auth');
 Route::post('/register/family', [AdminController::class, 'registerFamily'])->name('family.register');
+
+// Family Page
+Route::get('/family/{family_code}', [AdminController::class, 'showFamilyPage'])->name('familyPage');
+
 
 // Show login form and handle login
 Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');
