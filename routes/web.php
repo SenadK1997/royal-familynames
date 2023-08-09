@@ -31,6 +31,10 @@ Route::post('/register/family', [AdminController::class, 'registerFamily'])->nam
 
 // Family Page
 Route::get('/family/{family_code}', [AdminController::class, 'showFamilyPage'])->name('familyPage');
+// Register to existing family page SHOW
+Route::get('register/existing/{family_code?}', [AdminController::class, 'registerExistingFamily'])->name('register.existing')->middleware('auth');
+// Register to existing family page REGISTER
+Route::post('register/existing/family/{family_code?}', [AdminController::class, 'familyRegistrationExisting'])->name('familyRegistrationExisting')->middleware('auth');
 
 
 // Show login form and handle login

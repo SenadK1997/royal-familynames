@@ -25,7 +25,7 @@ RoyalFamilyNames
               </a>
             </p>
             <p class="mt-1 flex text-xs leading-5 text-gray-500">
-              <a href="mailto:leslie.alexander@example.com" class="relative truncate hover:underline">Overall Valuation:</a>
+              <p class="relative truncate hover:underline text-xs text-gray-500">Overall Valuation:</p>
             </p>
           </div>
         </div>
