@@ -53,7 +53,9 @@
       </div>
     </header>
       @if (Auth::user()->familynames()->count() === 0)
-        <h1>You didn't register to any family yet</h1>
+        <div class="w-full min-w-sm mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
+          <h1 class="text-red-500">You didn't register to any family yet</h1>
+        </div>
       @else
       {{-- Get the family with the highest valuation --}}
       @php

@@ -85,53 +85,6 @@ class AdminController extends Controller
         $request->session()->flush();
         return redirect('/');
     }
-    // public function myAccount($account_id)
-    // {
-    //     $families = Familyname::all();
-    //     try {
-    //         $user = User::where('account_id', $account_id)->firstOrFail();
-    //         $userFamily = $user->familynames->first(); // Get the first associated family name
-    //         $rank = null;
-    
-    //         if ($userFamily) {
-    //             $sortedFamilynames = Familyname::orderBy('valuation', 'desc')->get(); // Get all family names sorted by valuation
-    //             $userRank = $sortedFamilynames->search(function ($family) use ($userFamily) {
-    //                 return $family->id === $userFamily->id;
-    //             });
-                
-    //             if ($userRank !== false) {
-    //                 $rank = $userRank + 1; // Adding 1 to make it human-readable rank
-    //             }
-    //         }
-    //         $userAttachedFamilies = $families->filter(function ($family) use ($user) {
-    //             return $user->familynames->contains('id', $family->id);
-    //         });
-    //         $numberOfUsers = 0; // Initialize the counter
-        
-    //         foreach ($userAttachedFamilies as $family) {
-    //             $numberOfUsers += $family->users->count(); // Increment the counter by the number of users in the family
-    //         }
-    //         if ($userAttachedFamilies->count() > 1) {
-    //             $secondFamily = $userAttachedFamilies->skip(1)->first(); // Get the second family
-    //             $secondFamilyRank = $sortedFamilynames->search(function ($family) use ($secondFamily) {
-    //                 return $family->id === $secondFamily->id;
-    //             });
-                
-    //             if ($secondFamilyRank !== false) {
-    //                 $secondFamilyRank += 1; // Adding 1 to make it human-readable rank
-    //             }
-    //         }
-    
-    //         return view('MyAccount', [
-    //             'account_id' => $account_id,
-    //             'rank' => $rank,
-    //             'numberOfUsers' => $numberOfUsers,
-    //             'secondFamilyRank' => $secondFamilyRank
-    //         ], compact('families', 'user', 'userAttachedFamilies'));
-    //     } catch (ModelNotFoundException $exception) {
-    //         return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
-    //     }
-    // }
     public function myAccount($account_id)
     {
         $families = Familyname::all();
@@ -288,6 +241,8 @@ class AdminController extends Controller
             $amount = $request->input('valuation');
             $user->price_paid += $amount;
             $user->save();
+            $family->valuation += $amount;
+            $family->save();
             $user->familynames()->attach($family);
             return redirect()->route('myAccount', ['account_id' => $user->account_id]);
         }
