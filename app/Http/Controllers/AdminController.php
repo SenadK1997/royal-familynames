@@ -9,6 +9,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Http;
+use Intervention\Image\Facades\Image;
 
 class AdminController extends Controller
 {
@@ -54,6 +55,7 @@ class AdminController extends Controller
 
         $user->save();
         // return redirect()->route('myAccount', ['account_id' => $accountName]);
+        $request->session()->flush();
         return redirect()->route('login');
     }
 
@@ -246,7 +248,61 @@ class AdminController extends Controller
             $user->familynames()->attach($family);
             return redirect()->route('myAccount', ['account_id' => $user->account_id]);
         }
-
-
     }
+    public function uploadAvatar(Request $request)
+    {
+        $user = Auth::user();
+        if($request->file('avatar')) {
+            $avatar = $request->file('avatar');
+            $avatarName = uniqid() . '_' . $avatar->getClientOriginalName();
+            $userAvatar = Image::make($avatar)->fit(150, 150);
+            $userAvatar->save(storage_path('app/public/images/' . $avatarName), 100);
+            $user->avatar = $avatarName;
+        }
+        $user->save();
+        return redirect()->back()->with('success', 'Profile picture updated successfully');
+    }
+    public function uploadSocialMedia(Request $request)
+    {
+        $user = Auth::user();
+
+        $website_url = $request->input('website');
+        $instagram_url = $request->input('instagram');
+        $linkedin_url = $request->input('linkedin');
+        $twitter_url = $request->input('twitter');
+        $tiktok_url = $request->input('tiktok');
+
+        $user->website_url = $website_url;
+        $user->instagram_url = $instagram_url;
+        $user->linkedin_url = $linkedin_url;
+        $user->twitter_url = $twitter_url;
+        $user->tiktok_url = $tiktok_url;
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Social media links updated successfully');
+    }
+    public function showSupportFamily(Request $request, $family_code)
+    {
+        $family = Familyname::where('family_code', $family_code)->firstOrFail();
+        return view('support-family', compact('family'));
+    }
+    // public function supportFamily()
+    // {
+    //      // Update the valuation of the existing family registration
+    //      $amount = $request->input('valuation');
+    //      $user->price_paid += $amount;
+    //      $user->save();
+    //      $family->valuation += $amount;
+    //      $family->save();
+         
+    //      // If not registered, attach the family to the user
+    //      $amount = $request->input('valuation');
+    //      $user->price_paid += $amount;
+    //      $user->save();
+    //      $family->valuation += $amount;
+    //      $family->save();
+    //      $user->familynames()->attach($family);
+    //      return redirect()->route('myAccount', ['account_id' => $user->account_id]);
+    // }
 }

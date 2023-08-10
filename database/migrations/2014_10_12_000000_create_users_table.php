@@ -18,6 +18,8 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('account_id')->unique();
+            $table->string('avatar')->nullable();
+            $table->string('tiktok_url')->nullable();
             $table->string('twitter_url')->nullable();
             $table->string('instagram_url')->nullable();
             $table->string('linkedin_url')->nullable();

@@ -36,6 +36,13 @@ Route::get('register/existing/{family_code?}', [AdminController::class, 'registe
 // Register to existing family page REGISTER
 Route::post('register/existing/family/{family_code?}', [AdminController::class, 'familyRegistrationExisting'])->name('familyRegistrationExisting')->middleware('auth');
 
+// Upload avatar
+Route::post('/upload/avatar', [AdminController::class, 'uploadAvatar'])->name('upload.avatar');
+// Upload social media
+Route::post('/upload/social-media', [AdminController::class, 'uploadSocialMedia'])->name('upload.social');
+
+// Support Family Page
+Route::get('support/family/{family_code?}', [AdminController::class, 'showSupportFamily'])->name('support.family');
 
 // Show login form and handle login
 Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');

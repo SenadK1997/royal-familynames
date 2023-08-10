@@ -1,3 +1,4 @@
+@auth
 @extends('layouts.account')
 
 @section('title')
@@ -17,37 +18,32 @@
       </div>
   
       <div class="mx-auto max-w-7xl px-4 py-10 sm:px-6 lg:px-8">
-        <div class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none">
+        <div class="mx-auto flex max-w-2xl items-center justify-between gap-x-8 lg:mx-0 lg:max-w-none max-md:flex-col max-md:gap-y-2">
           <div class="flex items-center gap-x-6">
-            <img src="https://tailwindui.com/img/logos/48x48/tuple.svg" alt="" class="h-16 w-16 flex-none rounded-full ring-1 ring-gray-900/10">
+            @if (Auth::user()->avatar === null)
+              <span class="inline-block h-7 w-7 overflow-hidden rounded-full bg-gray-100">
+                <svg class="h-full w-full text-gray-300" fill="blue" viewBox="0 0 24 24">
+                  <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
+                </svg>
+              </span>
+              @else
+              <span class="relative inline-block">
+                <img class="h-8 w-8 rounded-full" src="{{ asset('storage/images/' . Auth::user()->avatar) }}" alt="">
+              </span>
+            @endif
             <h1>
-              <div class="mt-1 text-base font-semibold leading-6 text-gray-900">{{ $user->name }}</div>
+              <div class="mt-1 text-base font-semibold leading-6 text-gray-900 px-1">{{ $user->name }}</div>
               <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">{{ $user->account_id }}</div>
             </h1>
           </div>
-          <div class="flex items-center gap-x-4 sm:gap-x-6">
+          <div class="flex items-center gap-x-4 sm:gap-x-6 max-md:flex-col max-md:gap-y-2">
             <div class="flex flex-col items-center relative">
               <button class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600" id="toggleButton">Register to existing family name</button>
               <div id="otherFileContent" class="hidden absolute top-full left-0 w-full z-10 p-4 bg-white shadow-md">
-                  {{-- @include('partials.existing-family-names') --}}
                   @include('partials.existing-family-names', ['families' => $families])
               </div>
             </div>
             <a href="/register/family" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register new family name</a>
-  
-            <div class="relative sm:hidden">
-              <button type="button" class="-m-3 block p-3" id="more-menu-button" aria-expanded="false" aria-haspopup="true">
-                <span class="sr-only">More</span>
-                <svg class="h-5 w-5 text-gray-500" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
-                  <path d="M10 3a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM10 8.5a1.5 1.5 0 110 3 1.5 1.5 0 010-3zM11.5 15.5a1.5 1.5 0 10-3 0 1.5 1.5 0 003 0z" />
-                </svg>
-              </button>
-              <div class="absolute right-0 z-10 mt-0.5 w-32 origin-top-right rounded-md bg-white py-2 shadow-lg ring-1 ring-gray-900/5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="more-menu-button" tabindex="-1">
-                <!-- Active: "bg-gray-50", Not Active: "" -->
-                <button type="button" class="block w-full px-3 py-1 text-left text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="more-menu-item-0">Copy URL</button>
-                <a href="#" class="block px-3 py-1 text-sm leading-6 text-gray-900" role="menuitem" tabindex="-1" id="more-menu-item-1">Edit</a>
-              </div>
-            </div>
           </div>
         </div>
       </div>
@@ -61,6 +57,11 @@
       @php
           $highestValuationFamily = $userAttachedFamilies->sortByDesc('valuation')->first();
       @endphp
+      @if(session('success'))
+        <div class="alert alert-danger text-green-700">
+            {{ session('success') }}
+        </div>
+      @endif
 
       {{-- First family --}}
       <div class="w-full min-w-sm mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
@@ -134,3 +135,4 @@
     });
   </script>
 @endpush
+@endauth
