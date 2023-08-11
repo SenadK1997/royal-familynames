@@ -11,7 +11,12 @@ class Familyname extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'familyname_user');
+        return $this->belongsToMany(User::class, 'familyname_user')->withPivot('supported_amount');
+    }
+    public function supporters()
+    {
+        return $this->belongsToMany(User::class, 'familyname_supports')
+            ->withPivot('support_amount');
     }
     protected $fillable = ['family_name', 'flag_url', 'country', 'valuation', 'family_code', 'user_id'];
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Familyname;
+use App\Models\FamilynameSupport;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -196,7 +197,7 @@ class AdminController extends Controller
         $family->save();
         $user->price_paid += $valuation;
         $user->save();
-        $user->familynames()->attach($family);
+        $user->familynames()->attach($family, ['supported_amount' => $valuation]);
         return redirect()->route('myAccount', ['account_id' => $user->account_id]);
     }
 
@@ -205,7 +206,8 @@ class AdminController extends Controller
         try {
             $family = Familyname::where('family_code', $family_code)->firstOrFail();
             $users = $family->users;
-            return view('family/family-info', ['family_code' => $family_code], compact('family', 'users'));
+            $supporters = $family->supporters;
+            return view('family/family-info', ['family_code' => $family_code], compact('family', 'users', 'supporters'));
         } catch (ModelNotFoundException $exception) {
             return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
         }
@@ -233,11 +235,14 @@ class AdminController extends Controller
             // Update the valuation of the existing family registration
             $amount = $request->input('valuation');
             $user->price_paid += $amount;
+            $existingSupportedAmount = $user->familynames()->where('familyname_id', $family->id)->first()->pivot->supported_amount ?? 0;
+            $updatedSupportedAmount = $existingSupportedAmount + $amount;
+            $user->familynames()->updateExistingPivot($family, ['supported_amount' => $updatedSupportedAmount]);
             $user->save();
             $family->valuation += $amount;
             $family->save();
             
-            return redirect()->route('myAccount', ['account_id' => $user->account_id]);
+            return redirect()->route('myAccount', ['account_id' => $user->account_id])->with('success', 'Family supported successfully');
         } else {
             // If not registered, attach the family to the user
             $amount = $request->input('valuation');
@@ -245,7 +250,7 @@ class AdminController extends Controller
             $user->save();
             $family->valuation += $amount;
             $family->save();
-            $user->familynames()->attach($family);
+            $user->familynames()->attach($family, ['supported_amount' => $amount]);
             return redirect()->route('myAccount', ['account_id' => $user->account_id]);
         }
     }
@@ -265,13 +270,12 @@ class AdminController extends Controller
     public function uploadSocialMedia(Request $request)
     {
         $user = Auth::user();
-
         $website_url = $request->input('website');
         $instagram_url = $request->input('instagram');
         $linkedin_url = $request->input('linkedin');
         $twitter_url = $request->input('twitter');
         $tiktok_url = $request->input('tiktok');
-
+        
         $user->website_url = $website_url;
         $user->instagram_url = $instagram_url;
         $user->linkedin_url = $linkedin_url;
@@ -287,22 +291,38 @@ class AdminController extends Controller
         $family = Familyname::where('family_code', $family_code)->firstOrFail();
         return view('support-family', compact('family'));
     }
-    // public function supportFamily()
-    // {
-    //      // Update the valuation of the existing family registration
-    //      $amount = $request->input('valuation');
-    //      $user->price_paid += $amount;
-    //      $user->save();
-    //      $family->valuation += $amount;
-    //      $family->save();
-         
-    //      // If not registered, attach the family to the user
-    //      $amount = $request->input('valuation');
-    //      $user->price_paid += $amount;
-    //      $user->save();
-    //      $family->valuation += $amount;
-    //      $family->save();
-    //      $user->familynames()->attach($family);
-    //      return redirect()->route('myAccount', ['account_id' => $user->account_id]);
-    // }
+    public function supportFamily(Request $request, $family_code)
+    {
+        $user = Auth::user();
+        $family = Familyname::where('family_code', $family_code)->firstOrFail();
+        $amount = $request->input('valuation');
+        
+        // Find if there's an existing support record for the user and family
+        $existingSupport = FamilynameSupport::where('user_id', $user->id)
+            ->where('familyname_id', $family->id)
+            ->first();
+        if ($existingSupport) {
+            // Update the existing support amount
+            $user->price_paid += $amount;
+            $existingSupportedAmount = $existingSupport->support_amount;
+            $updatedSupportedAmount = $existingSupportedAmount + $amount;
+            $existingSupport->update(['support_amount' => $updatedSupportedAmount]);
+        } else {
+            $user->price_paid += $amount;
+            $user->save();
+            $family->valuation += $amount;
+            $family->save();
+            // Create a new support record
+            // $user->userSupportedFamily()->attach($family, ['support_amount' => $amount]);
+            $newSupport = new FamilynameSupport([
+                'user_id' => $user->id,
+                'familyname_id' => $family->id,
+                'support_amount' => $amount
+            ]);
+            $newSupport->save();
+        }
+        // Update family's valuation and user's price_paid
+        return redirect()->route('myAccount', ['account_id' => $user->account_id])
+        ->with('success', 'Family supported successfully');
+    }
 }

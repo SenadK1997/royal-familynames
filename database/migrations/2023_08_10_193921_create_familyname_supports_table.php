@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('familyname_user', function (Blueprint $table) {
+        Schema::create('familyname_supports', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('familyname_id');
-            $table->integer('supported_amount');
+            $table->integer('support_amount');
             $table->timestamps();
-            // Define foreign keys
+            // Add foreign key constraints
             $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('familyname_id')->references('id')->on('familynames')->onDelete('cascade');
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('familyname_user');
+        Schema::dropIfExists('familyname_supports');
     }
 };

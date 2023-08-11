@@ -43,6 +43,7 @@ Route::post('/upload/social-media', [AdminController::class, 'uploadSocialMedia'
 
 // Support Family Page
 Route::get('support/family/{family_code?}', [AdminController::class, 'showSupportFamily'])->name('support.family');
+Route::post('support/family/{family_code?}', [AdminController::class, 'supportFamily'])->name('supportFamily');
 
 // Show login form and handle login
 Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');

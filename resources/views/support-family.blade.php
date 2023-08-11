@@ -19,7 +19,7 @@ RoyalFamilyNames || {{ $family->family_name }}
     </div>
   
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" action="{{ route('support.family'', ['family_code' => $family->family_code ]) }}" method="POST">
+      <form class="space-y-6" action="{{ route('supportFamily', ['family_code' => $family->family_code ]) }}" method="POST">
         @csrf
         <div>
           <label for="family_name" class="block text-sm font-medium leading-6 text-gray-900">Family name</label>

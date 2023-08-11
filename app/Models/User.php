@@ -21,7 +21,12 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'account_id'
+        'account_id',
+        'website_url',
+        'instagram_url',
+        'linkedin_url',
+        'twitter_url',
+        'tiktok_url'
     ];
 
     /**
@@ -45,6 +50,10 @@ class User extends Authenticatable
     ];
     public function familynames()
     {
-        return $this->belongsToMany(Familyname::class, 'familyname_user');
+        return $this->belongsToMany(Familyname::class, 'familyname_user')->withPivot('supported_amount');
+    }
+    public function userSupportedFamily()
+    {
+        return $this->belongsToMany(FamilynameSupport::class, 'familyname_supports')->withPivot('support_amount');
     }
 }
