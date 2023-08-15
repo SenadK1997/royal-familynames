@@ -52,8 +52,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Familyname::class, 'familyname_user')->withPivot('supported_amount');
     }
-    public function userSupportedFamily()
+    // public function getSupportedFamily()
+    // {
+    //     return $this->belongsToMany(FamilynameSupport::class, 'user_family_supports')->withPivot('support_amount');
+    // }
+    public function getSupportedFamily()
     {
-        return $this->belongsToMany(FamilynameSupport::class, 'familyname_supports')->withPivot('support_amount');
+        return $this->belongsToMany(Familyname::class, 'user_family_supports')
+            ->as('support') // Use 'support' alias for the pivot table
+            ->withPivot('support_amount');
     }
 }

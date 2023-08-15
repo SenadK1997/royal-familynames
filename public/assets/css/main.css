@@ -1,3 +1,16 @@
 .content__height {
     min-height: calc(100vh - 195px) !important;
 }
+
+.quote-container {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.quote-content {
+    transition: opacity 0.5s ease-in-out;
+}
+
+.show-quote {
+    opacity: 1;
+}

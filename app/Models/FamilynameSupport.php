@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class FamilynameSupport extends Model
 {
     use HasFactory;
+    protected $table = 'user_family_supports';
     protected $fillable = [
         'user_id',
         'familyname_id',
@@ -16,11 +17,11 @@ class FamilynameSupport extends Model
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'familyname_supports')->withPivot('supported_amount');
+        return $this->belongsToMany(User::class, 'user_family_supports')->withPivot('support_amount');
     }
 
     public function familyname()
     {
-        return $this->belongsToMany(FamilynameSupport::class, 'familyname_supports')->withPivot('support_amount');
+        return $this->belongsToMany(Familyname::class, 'user_family_supports')->withPivot('support_amount');
     }
 }

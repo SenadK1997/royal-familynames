@@ -94,6 +94,9 @@ class AdminController extends Controller
         try {
             $user = User::where('account_id', $account_id)->firstOrFail();
             $userFamily = $user->familynames->first(); // Get the first associated family name
+
+            $userSupported = $user->getSupportedFamily;
+
             $rank = null;
             $numberOfUsersFirstFamily = 0; // Initialize the counter for the first family
             $numberOfUsersSecondFamily = 0; // Initialize the counter for the second family
@@ -138,7 +141,8 @@ class AdminController extends Controller
                 'rank' => $rank,
                 'numberOfUsersFirstFamily' => $numberOfUsersFirstFamily,
                 'numberOfUsersSecondFamily' => $numberOfUsersSecondFamily,
-                'secondFamilyRank' => $secondFamilyRank
+                'secondFamilyRank' => $secondFamilyRank,
+                'userSupported' => $userSupported
             ], compact('families', 'user', 'userAttachedFamilies'));
         } catch (ModelNotFoundException $exception) {
             return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
@@ -205,8 +209,12 @@ class AdminController extends Controller
     {
         try {
             $family = Familyname::where('family_code', $family_code)->firstOrFail();
-            $users = $family->users;
-            $supporters = $family->supporters;
+            $users = $family->users->sortByDesc(function($user) {
+                return $user->pivot->supported_amount;
+            });
+            $supporters = $family->supporters->sortByDesc(function($supporter) {
+                return $supporter->pivot->support_amount;
+            });
             return view('family/family-info', ['family_code' => $family_code], compact('family', 'users', 'supporters'));
         } catch (ModelNotFoundException $exception) {
             return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
@@ -237,9 +245,9 @@ class AdminController extends Controller
             $user->price_paid += $amount;
             $existingSupportedAmount = $user->familynames()->where('familyname_id', $family->id)->first()->pivot->supported_amount ?? 0;
             $updatedSupportedAmount = $existingSupportedAmount + $amount;
+            $family->valuation += $amount;
             $user->familynames()->updateExistingPivot($family, ['supported_amount' => $updatedSupportedAmount]);
             $user->save();
-            $family->valuation += $amount;
             $family->save();
             
             return redirect()->route('myAccount', ['account_id' => $user->account_id])->with('success', 'Family supported successfully');
@@ -270,21 +278,42 @@ class AdminController extends Controller
     public function uploadSocialMedia(Request $request)
     {
         $user = Auth::user();
+        $domain = 'http://';
         $website_url = $request->input('website');
         $instagram_url = $request->input('instagram');
         $linkedin_url = $request->input('linkedin');
         $twitter_url = $request->input('twitter');
         $tiktok_url = $request->input('tiktok');
+        if ($website_url) {
+            $user->website_url = $domain . $website_url;
+        }
+        if ($instagram_url) {
+            $user->instagram_url = $domain . $instagram_url;
+        }
+        if ($linkedin_url) {
+            $user->linkedin_url = $domain . $linkedin_url;
+        }
+        if ($twitter_url) {
+            $user->twitter_url = $domain . $twitter_url;
+        }
+        if ($tiktok_url) {
+            $user->tiktok_url = $domain . $tiktok_url;
+        }
         
-        $user->website_url = $website_url;
-        $user->instagram_url = $instagram_url;
-        $user->linkedin_url = $linkedin_url;
-        $user->twitter_url = $twitter_url;
-        $user->tiktok_url = $tiktok_url;
-
         $user->save();
 
         return redirect()->back()->with('success', 'Social media links updated successfully');
+    }
+    public function uploadQuote(Request $request)
+    {
+        $user = Auth::user();
+        $quote = $request->input('quote');
+
+        $user->quote = $quote;
+
+        $user->save();
+
+        return redirect()->back()->with('success', 'Quote updated successfully');
     }
     public function showSupportFamily(Request $request, $family_code)
     {
@@ -313,7 +342,7 @@ class AdminController extends Controller
             $family->valuation += $amount;
             $family->save();
             // Create a new support record
-            // $user->userSupportedFamily()->attach($family, ['support_amount' => $amount]);
+            // $user->getSupportedFamily()->attach($family, ['support_amount' => $amount]);
             $newSupport = new FamilynameSupport([
                 'user_id' => $user->id,
                 'familyname_id' => $family->id,
@@ -324,5 +353,19 @@ class AdminController extends Controller
         // Update family's valuation and user's price_paid
         return redirect()->route('myAccount', ['account_id' => $user->account_id])
         ->with('success', 'Family supported successfully');
+    }
+    public function getUserQuote($userId)
+    {
+        $user = User::where('id', $userId)->firstOrFail();
+
+        if ($user) {
+            return response()->json([
+                'quote' => $user->quote,
+                'avatar' => $user->avatar,
+                'name' => $user->name
+            ]);
+        } else {
+            return response()->json(['quote' => 'User not found']);
+        }
     }
 }

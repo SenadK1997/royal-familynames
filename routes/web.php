@@ -40,10 +40,18 @@ Route::post('register/existing/family/{family_code?}', [AdminController::class, 
 Route::post('/upload/avatar', [AdminController::class, 'uploadAvatar'])->name('upload.avatar');
 // Upload social media
 Route::post('/upload/social-media', [AdminController::class, 'uploadSocialMedia'])->name('upload.social');
+// Upload quote
+Route::post('/upload/quote', [AdminController::class, 'uploadQuote'])->name('upload.quote');
+// See the quote
+Route::get('/get-user-quote/{userId}', [AdminController::class, 'getUserQuote']);
 
 // Support Family Page
 Route::get('support/family/{family_code?}', [AdminController::class, 'showSupportFamily'])->name('support.family');
 Route::post('support/family/{family_code?}', [AdminController::class, 'supportFamily'])->name('supportFamily');
+
+// Family member search
+Route::get('/search-family-members', [AdminController::class, 'searchFamilyMembers'])->name('search.family.members');
+
 
 // Show login form and handle login
 Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');

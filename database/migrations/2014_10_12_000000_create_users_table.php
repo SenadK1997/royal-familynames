@@ -24,6 +24,7 @@ return new class extends Migration
             $table->string('instagram_url')->nullable();
             $table->string('linkedin_url')->nullable();
             $table->string('website_url')->nullable();
+            $table->string('quote', 255)->nullable();
             $table->integer('price_paid')->nullable();
             $table->rememberToken();
             $table->timestamps();

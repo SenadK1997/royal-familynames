@@ -24,14 +24,14 @@ RoyalFamilyNames - Register Family
         <div>
           <label for="family_name" class="block text-sm font-medium leading-6 text-gray-900">Enter your family name</label>
           <div class="mt-2">
-            <input id="family_name" name="family_name" type="text" required class="capitalize px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+            <input id="family_name" name="family_name" type="text" required class="capitalize px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-100">
           </div>
         </div>
         <input id="flag_url" name="flag_url" type="hidden">
         <div class="mb-4">
           <label for="country" class="block text-sm font-medium text-gray-700">From</label>
           <div class="relative mt-1">
-              <input id="country" name="country" type="text" class="form-input px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Search for a country">
+              <input id="country" name="country" type="text" class="form-input px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-100" placeholder="Search for a country">
               <div id="countryDropdown" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden overflow-y-scroll h-64">
                   <!-- Options will be added here dynamically -->
               </div>
@@ -40,7 +40,7 @@ RoyalFamilyNames - Register Family
         <div>
             <label for="valuation" class="block text-sm font-medium leading-6 text-gray-900">Amount of support</label>
             <div class="mt-2">
-              <input id="valuation" min="5" name="valuation" type="number" required class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
+              <input id="valuation" min="5" name="valuation" type="number" required class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-100">
             </div>
         </div>
         <div>

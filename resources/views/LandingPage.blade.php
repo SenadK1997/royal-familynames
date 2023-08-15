@@ -17,7 +17,10 @@ RoyalFamilyNames
   @foreach ($sortedFamilynames as $index => $familyname)
       <li class="relative flex justify-between gap-x-6 py-5 cursor-pointer" id="familyItem{{ $ranking }}" data-family-code="{{ $familyname->family_code }}">
         <div class="flex gap-x-4 items-center">
-          <span class="inset-x-0 -top-px bottom-0">{{ $ranking }}</span>
+          {{-- <span class="inset-x-0 -top-px bottom-0 text-xl">{{ $ranking }}</span> --}}
+          <span class="inset-x-0 -top-px bottom-0 text-xl {{ $ranking === 1 ? 'text-[#FFD700] font-bold' : ($ranking === 2 ? 'text-[#C0C0C0]' : ($ranking === 3 ? 'text-[#CD7F32]' : 'text-gray-800')) }}">
+            {{ $ranking }}
+          </span>
           <div class="min-w-0 flex-auto">
             <p class="text-sm font-semibold leading-6 text-gray-900">
               <a href="#" class="flex">

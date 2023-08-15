@@ -36,14 +36,32 @@
               <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">{{ $user->account_id }}</div>
             </h1>
           </div>
-          <div class="flex items-center gap-x-4 sm:gap-x-6 max-md:flex-col max-md:gap-y-2">
-            <div class="flex flex-col items-center relative">
-              <button class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600" id="toggleButton">Register to existing family name</button>
-              <div id="otherFileContent" class="hidden absolute top-full left-0 w-full z-10 p-4 bg-white shadow-md">
-                  @include('partials.existing-family-names', ['families' => $families])
+          <div class="flex flex-col">          
+            <div class="flex items-center gap-x-4 sm:gap-x-6 max-md:flex-col max-md:gap-y-2">
+              <div class="flex flex-col items-center relative">
+                <button class="rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-green-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-green-600" id="toggleButton">Register to existing family name</button>
+                <div id="otherFileContent" class="hidden absolute top-full left-0 w-full z-10 p-4 bg-white shadow-md">
+                    @include('partials.existing-family-names', ['families' => $families])
+                </div>
               </div>
+              <a href="/register/family" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register new family name</a>
             </div>
-            <a href="/register/family" class="rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Register new family name</a>
+            <div class="flex items-center gap-x-4 max-md:flex-col">
+              <div class="bg-blue-500 text-white py-2 px-4 rounded-lg mt-6 justify-center flex items-center max-md:mt-2">
+                Total money spent:
+                <span class="text-green-300 font-semibold">
+                  @if (Auth::user()->price_paid === null)
+                  0.00 $
+                  @else
+                  {{ Auth::user()->price_paid }}.00 $
+                  @endif
+                </span>
+              </div>
+                <button type="button" data-modal-target="crypto-modal" data-modal-toggle="crypto-modal" class="rounded-lg mt-6 max-md:mt-2 flex justify-center items-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+                  <svg aria-hidden="true" class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.899a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1"></path></svg>
+                  Supported family list
+                </button>
+            </div>
           </div>
         </div>
       </div>
@@ -65,26 +83,26 @@
 
       {{-- First family --}}
       <div class="w-full min-w-sm mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-          <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-400 flex mx-auto w-full justify-center gap-x-2">Your Family name
+          <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-300 flex mx-auto w-full justify-center gap-x-2">Your Family name
               <a href="/family/{{ $highestValuationFamily->family_code }}" class="text-blue-500">
                   {{ $highestValuationFamily->family_name }}
               </a>
               rank is:
           </h5>
           <div class="flex items-baseline text-gray-900 dark:text-white mx-auto w-full justify-center">
-              <span class="text-9xl font-extrabold tracking-tight text-[#525782]">{{ $rank }}</span>
+              <span class="text-9xl font-extrabold tracking-tight {{ $rank === 1 ? 'text-[#FFD700] font-bold' : ($rank === 2 ? 'text-[#C0C0C0]' : ($rank === 3 ? 'text-[#CD7F32]' : 'text-gray-800')) }}">{{ $rank }}</span>
           </div>
           <ul role="list" class="space-y-5 my-7">
             <li class="flex space-x-3 items-center mx-auto w-full justify-center">
                 <svg class="flex-shrink-0 w-4 h-4 text-blue-600 dark:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
                 </svg>
-                <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">{{ $numberOfUsersFirstFamily }} Family member/s</span>
+                <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-300">{{ $numberOfUsersFirstFamily }} Family member/s</span>
             </li>
         </ul>
           <button type="button" class="gap-x-2 items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center">
-              <span class="text-xl font-normal tracking-tight text-gray-100">Total family name valuation: </span>
-              <div>
+              <span class="text-xl font-normal tracking-tight text-gray-100">Total valuation: </span>
+              <div class="whitespace-nowrap">
                   <span class="text-2xl font-extrabold tracking-tight text-green-300">{{ $highestValuationFamily->valuation }}<span class="text-lg font-bold tracking-tight">.00</span></span>
                   <span class="text-xl font-semibold text-green-300">$</span>
               </div>
@@ -93,26 +111,26 @@
       {{-- Second familyname --}}
       @if ($userAttachedFamilies->count() > 1)
       <div class="w-full min-w-sm mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
-        <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-400 flex mx-auto w-full justify-center gap-x-2">Your Family name
+        <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-300 flex mx-auto w-full justify-center gap-x-2">Your Family name
           <a href="/family/{{ $userAttachedFamilies->skip(1)->first()->family_code }}" class="text-blue-500">
             {{ $userAttachedFamilies->skip(1)->first()->family_name }}
           </a>
           rank is:
         </h5>
         <div class="flex items-baseline text-gray-900 dark:text-white mx-auto w-full justify-center">
-          <span class="text-9xl font-extrabold tracking-tight text-[#525782]">{{ $secondFamilyRank }}</span>
+          <span class="text-9xl font-extrabold tracking-tight {{ $secondFamilyRank === 1 ? 'text-[#FFD700] font-bold' : ($secondFamilyRank === 2 ? 'text-[#C0C0C0]' : ($secondFamilyRank === 3 ? 'text-[#CD7F32]' : 'text-gray-800')) }}">{{ $secondFamilyRank }}</span>
         </div>
         <ul role="list" class="space-y-5 my-7">
             <li class="flex space-x-3 items-center mx-auto w-full justify-center">
                 <svg class="flex-shrink-0 w-4 h-4 text-blue-600 dark:text-blue-500" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5Zm3.707 8.207-4 4a1 1 0 0 1-1.414 0l-2-2a1 1 0 0 1 1.414-1.414L9 10.586l3.293-3.293a1 1 0 0 1 1.414 1.414Z"/>
                 </svg>
-                <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-400">{{ $numberOfUsersSecondFamily }} Family member/s</span>
+                <span class="text-base font-normal leading-tight text-gray-500 dark:text-gray-300">{{ $numberOfUsersSecondFamily }} Family member/s</span>
             </li>
         </ul>
         <button type="button" class="gap-x-2 items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center">
-          <span class="text-xl font-normal tracking-tight text-gray-100">Total family name valuation: </span>
-          <div>
+          <span class="text-xl font-normal tracking-tight text-gray-100">Total valuation: </span>
+          <div class="whitespace-nowrap">
             <span class="text-2xl font-extrabold tracking-tight text-green-300">{{ $userAttachedFamilies->skip(1)->first()->valuation }}<span class="text-lg font-bold tracking-tight">.00</span></span>
             <span class="text-xl font-semibold text-green-300">$</span>
           </div>
@@ -121,6 +139,47 @@
       @endif
       @endif
   </main>
+
+
+  <!-- Main modal -->
+<div id="crypto-modal" tabindex="-1" aria-hidden="true" class="fixed top-0 left-0 right-0 z-50 hidden w-full p-4 overflow-x-hidden overflow-y-auto md:inset-0 h-[calc(100%-1rem)] max-h-full">
+  <div class="relative w-full max-w-md max-h-full">
+      <!-- Modal content -->
+      <div class="relative bg-white rounded-lg shadow dark:bg-gray-700">
+          <button type="button" class="absolute top-3 right-2.5 text-gray-400 bg-transparent hover:bg-gray-200 hover:text-gray-900 rounded-lg text-sm w-8 h-8 ml-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-white" data-modal-hide="crypto-modal">
+              <svg class="w-3 h-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 14 14">
+                  <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="m1 1 6 6m0 0 6 6M7 7l6-6M7 7l-6 6"/>
+              </svg>
+              <span class="sr-only">Close modal</span>
+          </button>
+          <!-- Modal header -->
+          <div class="px-6 py-4 border-b rounded-t dark:border-gray-600">
+              <h3 class="text-base font-semibold text-gray-900 lg:text-xl dark:text-white">
+                  Supported families
+              </h3>
+          </div>
+          <!-- Modal body -->
+          <div class="p-6">
+              <ul class="my-4 space-y-3">
+                @if ($userSupported->isEmpty())
+                    <li>
+                       <div>{{ $user->name }} did not supported any family yet.</div>
+                    </li>
+                @else
+                @foreach ($userSupported as $supportedFamily)
+                <li>
+                  <a href="/family/{{ $supportedFamily->family_code }}" class="flex items-center p-3 text-base font-bold text-gray-900 rounded-lg bg-gray-50 hover:bg-gray-100 group hover:shadow dark:bg-gray-600 dark:hover:bg-gray-500 dark:text-white">
+                    <span class="flex-1 ml-3 text-zinc-500 whitespace-nowrap dark:text-white">{{ $supportedFamily->family_name }}</span>
+                    <span class="inline-flex items-center justify-center px-2 py-0.5 ml-3 text-xs font-medium text-green-700 bg-gray-200 rounded dark:bg-gray-700 dark:text-green-300">{{ $supportedFamily->support->support_amount }}.00 $</span>
+                  </a>
+                </li>
+                @endforeach
+                @endif
+              </ul>
+          </div>
+      </div>
+  </div>
+</div>
   
 @endsection
 @push('script')
