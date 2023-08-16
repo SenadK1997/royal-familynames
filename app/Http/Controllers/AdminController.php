@@ -243,13 +243,21 @@ class AdminController extends Controller
             // Update the valuation of the existing family registration
             $amount = $request->input('valuation');
             $user->price_paid += $amount;
-            $existingSupportedAmount = $user->familynames()->where('familyname_id', $family->id)->first()->pivot->supported_amount ?? 0;
+        
+            // Get the pivot model for the user-family relationship
+            $pivotModel = $user->familynames()->where('familyname_id', $family->id)->first()->pivot;
+        
+            // Update the supported_amount in the pivot model
+            $existingSupportedAmount = $pivotModel->supported_amount ?? 0;
             $updatedSupportedAmount = $existingSupportedAmount + $amount;
-            $family->valuation += $amount;
-            $user->familynames()->updateExistingPivot($family, ['supported_amount' => $updatedSupportedAmount]);
+            $pivotModel->supported_amount = $updatedSupportedAmount;
+            $pivotModel->save();
+        
+            // Update the user and family models
             $user->save();
+            $family->valuation += $amount;
             $family->save();
-            
+        
             return redirect()->route('myAccount', ['account_id' => $user->account_id])->with('success', 'Family supported successfully');
         } else {
             // If not registered, attach the family to the user
@@ -321,39 +329,45 @@ class AdminController extends Controller
         return view('support-family', compact('family'));
     }
     public function supportFamily(Request $request, $family_code)
-    {
-        $user = Auth::user();
-        $family = Familyname::where('family_code', $family_code)->firstOrFail();
-        $amount = $request->input('valuation');
+{
+    $user = Auth::user();
+    $family = Familyname::where('family_code', $family_code)->firstOrFail();
+    $amount = $request->input('valuation');
+    
+    // Find if there's an existing support record for the user and family
+    $existingSupport = FamilynameSupport::where('user_id', $user->id)
+        ->where('familyname_id', $family->id)
+        ->first();
+    
+    if ($existingSupport) {
+        // Update the existing support amount
+        $user->price_paid += $amount;
+        $user->save();
+
+        $existingSupport->support_amount += $amount;
+        $existingSupport->save();
+
+        $family->valuation += $amount;
+        $family->save();
+    } else {
+        // Create a new support record
+
+        $family->valuation += $amount;
+        $family->save();
         
-        // Find if there's an existing support record for the user and family
-        $existingSupport = FamilynameSupport::where('user_id', $user->id)
-            ->where('familyname_id', $family->id)
-            ->first();
-        if ($existingSupport) {
-            // Update the existing support amount
-            $user->price_paid += $amount;
-            $existingSupportedAmount = $existingSupport->support_amount;
-            $updatedSupportedAmount = $existingSupportedAmount + $amount;
-            $existingSupport->update(['support_amount' => $updatedSupportedAmount]);
-        } else {
-            $user->price_paid += $amount;
-            $user->save();
-            $family->valuation += $amount;
-            $family->save();
-            // Create a new support record
-            // $user->getSupportedFamily()->attach($family, ['support_amount' => $amount]);
-            $newSupport = new FamilynameSupport([
-                'user_id' => $user->id,
-                'familyname_id' => $family->id,
-                'support_amount' => $amount
-            ]);
-            $newSupport->save();
-        }
-        // Update family's valuation and user's price_paid
-        return redirect()->route('myAccount', ['account_id' => $user->account_id])
-        ->with('success', 'Family supported successfully');
+        $newSupport = new FamilynameSupport([
+            'user_id' => $user->id,
+            'familyname_id' => $family->id,
+            'support_amount' => $amount
+        ]);
+        $newSupport->save();
     }
+    
+    // Update family's valuation and user's price_paid
+    return redirect()->route('myAccount', ['account_id' => $user->account_id])
+        ->with('success', 'Family supported successfully');
+}
+
     public function getUserQuote($userId)
     {
         $user = User::where('id', $userId)->firstOrFail();
