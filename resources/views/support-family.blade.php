@@ -19,8 +19,7 @@ RoyalFamilyNames || {{ $family->family_name }}
     </div>
   
     <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" action="{{ route('supportFamily', ['family_code' => $family->family_code ]) }}" method="POST">
-        @csrf
+      <div class="space-y-6">
         <div>
           <label for="family_name" class="block text-sm font-medium leading-6 text-gray-900">Family name</label>
           @if(session('error'))
@@ -38,25 +37,58 @@ RoyalFamilyNames || {{ $family->family_name }}
               <input id="country" name="country" type="text" required class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" disabled value="{{ $family->country }}">
             </div>
           </div>
-  
-        <div>
-          <div class="flex items-center justify-between">
-            <label for="valuation" class="block text-sm font-medium leading-6 text-gray-900">Amount</label>
-          </div>
-          <div class="mt-2">
-            <input id="valuation" name="valuation" type="number" autocomplete="current-password" required class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-          </div>
-        </div>
-  
-        <div>
+          <div id="paypal-donate-button-container" class="flex mx-auto w-full justify-center"></div>
+        {{-- <div>
           <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Support {{ $family->family_name }}</button>
-        </div>
-      </form>
+        </div> --}}
+      </div>
         <div class="mt-8 flex w-full mx-auto text-red-500 justify-center text-[10px] font-normal">
             Note: You will not become member of the family by supporting. If you want to become a member of the family, go to your account and register to existing family
         </div>
     </div>
-  </div>
-  
+
+</div>
 @endsection
+@push('script')
+<script>
+  PayPal.Donation.Button({
+      env: 'sandbox',
+      hosted_button_id: 'WW3RZCD4UHNXS',
+      keno: 'je tito',
+      image: {
+          src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
+          title: 'PayPal - The safer, easier way to pay online!',
+          alt: 'Donate with PayPal button'
+      },
+      onComplete: function (params) {
+          console.log({ params });
+          var donationAmount = params.amt;
+          var familyCode = window.location.pathname.split('/').pop();
+
+          // Include the CSRF token in the headers
+          var csrfToken = $('meta[name="csrf-token"]').attr('content');
+
+          $.ajax({
+              url: '/support/family',
+              method: 'POST',
+              data: { amount: donationAmount, family_code: familyCode },
+              headers: {
+                  'X-CSRF-TOKEN': csrfToken
+              },
+              success: function(response) {
+                  // Handle the response, e.g., show a thank-you message
+                  // console.log(response);
+                  alert('You successfully supported the family')
+              },
+              error: function(error) {
+                  // Handle errors
+                  console.log(error);
+                  alert('Something went wrong')
+              }
+          });
+      },
+  }).render('#paypal-donate-button-container');
+</script>
+
+@endpush
 @endauth

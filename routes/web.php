@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Models\Familyname;
+use App\Http\Controllers\DonationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -47,7 +48,7 @@ Route::get('/get-user-quote/{userId}', [AdminController::class, 'getUserQuote'])
 
 // Support Family Page
 Route::get('support/family/{family_code?}', [AdminController::class, 'showSupportFamily'])->name('support.family');
-Route::post('support/family/{family_code?}', [AdminController::class, 'supportFamily'])->name('supportFamily');
+Route::post('support/family', [DonationController::class, 'supportFamily'])->name('supportFamily');
 
 // Family member search
 Route::get('/search-family-members', [AdminController::class, 'searchFamilyMembers'])->name('search.family.members');
