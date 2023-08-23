@@ -14,6 +14,10 @@ use Intervention\Image\Facades\Image;
 
 class AdminController extends Controller
 {
+    public function showAbout()
+    {
+        return view('about');
+    }
     // Show the registration form
     public function showRegistrationForm()
     {

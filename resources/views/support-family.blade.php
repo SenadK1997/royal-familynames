@@ -54,7 +54,6 @@ RoyalFamilyNames || {{ $family->family_name }}
   PayPal.Donation.Button({
       env: 'sandbox',
       hosted_button_id: 'WW3RZCD4UHNXS',
-      keno: 'je tito',
       image: {
           src: 'https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif',
           title: 'PayPal - The safer, easier way to pay online!',

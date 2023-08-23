@@ -21,6 +21,8 @@ Route::get('/', function() {
     return view ('LandingPage', compact('familynames'));
 });
 
+Route::get('/about', [AdminController::class, 'showAbout'])->name('about');
+
 // Show registration form and handle registration
 Route::get('/register', [AdminController::class, 'showRegistrationForm'])->name('registration');
 Route::post('/register', [AdminController::class, 'register'])->name('register');
@@ -28,14 +30,14 @@ Route::post('/register', [AdminController::class, 'register'])->name('register')
 // Family Register
 
 Route::get('/register/family', [AdminController::class, 'showRegisterFamily'])->name('family.registration')->middleware('auth');
-Route::post('/register/family', [AdminController::class, 'registerFamily'])->name('family.register');
+Route::post('/register/family', [DonationController::class, 'registerFamily'])->name('family.register');
 
 // Family Page
 Route::get('/family/{family_code}', [AdminController::class, 'showFamilyPage'])->name('familyPage');
 // Register to existing family page SHOW
-Route::get('register/existing/{family_code?}', [AdminController::class, 'registerExistingFamily'])->name('register.existing')->middleware('auth');
+Route::get('/register/existing/{family_code?}', [AdminController::class, 'registerExistingFamily'])->name('register.existing')->middleware('auth');
 // Register to existing family page REGISTER
-Route::post('register/existing/family/{family_code?}', [AdminController::class, 'familyRegistrationExisting'])->name('familyRegistrationExisting')->middleware('auth');
+Route::post('/register/existing/family', [DonationController::class, 'familyRegistrationExisting'])->name('familyRegistrationExisting')->middleware('auth');
 
 // Upload avatar
 Route::post('/upload/avatar', [AdminController::class, 'uploadAvatar'])->name('upload.avatar');

@@ -8,7 +8,7 @@ RoyalFamilyNames
 
 @section('content')
 
-<ul role="list" class="divide-y divide-gray-100 w-full max-w-screen-sm">
+<ul role="list" class="divide-y divide-gray-100 w-full max-w-screen-sm h-full">
   @php
     // Sort the $familynames array based on valuation in descending order
     $sortedFamilynames = $familynames->sortByDesc('valuation');

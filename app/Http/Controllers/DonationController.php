@@ -13,13 +13,10 @@ class DonationController extends Controller
     public function registerFamily(Request $request)
     {
         $user = Auth::user();
-        if ($user->familynames()->count() >= 2) {
-            return redirect()->back()->with('error', 'You can only register a maximum of 2 family names.');
-        }
         $familyName = $request->input('family_name');
         $country = $request->input('country');
         $flag_url = $request->input('flag_url');
-        $valuation = $request->input('valuation');
+        $valuation = $request->input('amount');
 
         $firstLetter = substr($familyName, 0, 1);
 
@@ -52,19 +49,16 @@ class DonationController extends Controller
         $user->familynames()->attach($family, ['supported_amount' => $valuation]);
         return redirect()->route('myAccount', ['account_id' => $user->account_id]);
     }
-    public function familyRegistrationExisting(Request $request, $family_code)
+    public function familyRegistrationExisting(Request $request)
     {
         $user = Auth::user();
-        if ($user->familynames()->count() >= 2) {
-            return redirect()->back()->with('error', 'You can only register a maximum of 2 family names.');
-        }
-        
+        $family_code = $request->input('family_code');
         $family = Familyname::where('family_code', $family_code)->firstOrFail();
         
         // Check if the user is already registered with the family
         if ($user->familynames->contains($family)) {
             // Update the valuation of the existing family registration
-            $amount = $request->input('valuation');
+            $amount = $request->input('amount');
             $user->price_paid += $amount;
         
             // Get the pivot model for the user-family relationship
@@ -84,7 +78,7 @@ class DonationController extends Controller
             return redirect()->route('myAccount', ['account_id' => $user->account_id])->with('success', 'Family supported successfully');
         } else {
             // If not registered, attach the family to the user
-            $amount = $request->input('valuation');
+            $amount = $request->input('amount');
             $user->price_paid += $amount;
             $user->save();
             $family->valuation += $amount;

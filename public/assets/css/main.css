@@ -14,3 +14,9 @@
 .show-quote {
     opacity: 1;
 }
+body {
+    background-image: url('{{ asset("storage/images/medievalscroll.png") }}');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}

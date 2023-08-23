@@ -102,11 +102,16 @@
                             <div class="text-sm font-medium leading-6 text-gray-900">{{ $user->name }}</div>
                             <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">{{ $user->account_id }}</div>
                           </div>
-                          <div class="flex mt-1 text-xs leading-5 text-gray-500 gap-x-2">
+                          <div class="flex mt-1 text-xs leading-5 text-gray-500 items-center gap-x-2">
                             <p>Total paid amount:</p>
-                            @foreach ($user->familynames as $userSupported)  
-                              <p class="text-green-700 font-bold">{{ $userSupported->pivot->supported_amount }}.00 $</p>
-                            @endforeach
+                            <div class="flex flex-col">
+                              @foreach ($user->familynames as $userSupported)  
+                              <div class="flex">
+                                  <p class="text-gray-400 font-bold">{{ $userSupported->family_name }}:&nbsp;</p>
+                                <p class="text-green-700 font-bold">{{ $userSupported->pivot->supported_amount }}.00 $</p>
+                              </div>
+                              @endforeach
+                            </div>
                           </div>
                         </div>
                       </div>
