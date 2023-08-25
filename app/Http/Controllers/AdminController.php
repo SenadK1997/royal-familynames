@@ -14,6 +14,14 @@ use Intervention\Image\Facades\Image;
 
 class AdminController extends Controller
 {
+    public function homepage()
+    {
+        $familynames = Familyname::orderBy('valuation', 'desc')->paginate(10);
+        // $paginator->firstItem();
+        // $sortedFamilynames = $familynames->sortByDesc('valuation');
+        $ranking = ($familynames->currentPage() - 1) * $familynames->perPage() + 1;
+        return view ('LandingPage', compact('familynames', 'ranking'));
+    }
     public function showAbout()
     {
         return view('about');
@@ -50,6 +58,11 @@ class AdminController extends Controller
         // Append the random number to the account ID
         $accountName .= $randomNumber;
 
+        $existingUser = User::where('email', $request->input('email'))->first();
+        if ($existingUser) {
+            return redirect()->back()->with('error', 'Email already in use');
+            // return response()->json(['message' => 'Email is already registered']);
+        }
         // Create and save the user to the database
         $user = new User([
             'name' => $name,
@@ -97,48 +110,120 @@ class AdminController extends Controller
         $families = Familyname::all();
         try {
             $user = User::where('account_id', $account_id)->firstOrFail();
-            $userFamily = $user->familynames->first(); // Get the first associated family name
 
+            
             $userSupported = $user->getSupportedFamily;
 
+            // $userFamily = $user->familynames->first();
+            // $rank = null;
+            // $secondFamilyRank = null;
+            // $attachedFamilyCount = $user->familynames->count();
+
+            // if ($userFamily) {
+            //     // Sve familije sortirane od najvece valuation
+            //     $sortedFamilynames = Familyname::orderBy('valuation', 'desc')->get();
+                
+            //     // User rank of prve family id
+            //     $userRank = $sortedFamilynames->search(function ($family) use ($userFamily) {
+            //         return $family->id === $userFamily->id;
+            //     });
+                
+            //     if ($userRank !== false) {
+            //         $rank = $userRank + 1;
+            //     }
+            // }
+            // Sve familije attachane za usera
+            $userAttachedFamilies = $user->familynames;
+            $sortedFamilynames = Familyname::orderBy('valuation', 'desc')->get();
             $rank = null;
-            $numberOfUsersFirstFamily = 0; // Initialize the counter for the first family
-            $numberOfUsersSecondFamily = 0; // Initialize the counter for the second family
-            
-            if ($userFamily) {
-                $sortedFamilynames = Familyname::orderBy('valuation', 'desc')->get(); // Get all family names sorted by valuation
+            $secondFamilyRank = null;
+
+            if ($userAttachedFamilies->count() > 1) {
+                // User has more than one attached family
+                $userFamily = $userAttachedFamilies->skip(1)->first(); // Get the first family
+                $secondFamily = $userAttachedFamilies->first(); // Get the second family
+
                 $userRank = $sortedFamilynames->search(function ($family) use ($userFamily) {
                     return $family->id === $userFamily->id;
                 });
-                
+
+                if ($userRank !== false) {
+                    $rank = $userRank + 1; // Adding 1 to make it human-readable rank
+                }
+
+                $secondFamilyRank = $sortedFamilynames->search(function ($family) use ($secondFamily) {
+                    return $family->id === $secondFamily->id;
+                });
+
+                if ($secondFamilyRank !== false) {
+                    $secondFamilyRank += 1; // Adding 1 to make it human-readable rank
+                }
+            } else if ($userAttachedFamilies->count() === 1) {
+                // User has only one attached family
+                $userFamily = $userAttachedFamilies->first();
+
+                $userRank = $sortedFamilynames->search(function ($family) use ($userFamily) {
+                    return $family->id === $userFamily->id;
+                });
+
                 if ($userRank !== false) {
                     $rank = $userRank + 1; // Adding 1 to make it human-readable rank
                 }
             }
-            
-            $userAttachedFamilies = $families->filter(function ($family) use ($user) {
-                return $user->familynames->contains('id', $family->id);
-            });
-            
+            $numberOfUsersFirstFamily = 0;
+            $numberOfUsersSecondFamily = 0;
             foreach ($userAttachedFamilies as $family) {
-                if ($family->id === $userFamily->id) {
-                    $numberOfUsersFirstFamily = $family->users->count();
-                } else {
-                    $numberOfUsersSecondFamily += $family->users->count();
-                }
-            }
-            
-            $secondFamilyRank = null;
-            if ($userAttachedFamilies->count() > 1) {
-                $secondFamily = $userAttachedFamilies->skip(1)->first(); // Get the second family
-                $secondFamilyRank = $sortedFamilynames->search(function ($family) use ($secondFamily) {
-                    return $family->id === $secondFamily->id;
-                });
+                $usersCount = $family->users->count();
                 
-                if ($secondFamilyRank !== false) {
-                    $secondFamilyRank += 1; // Adding 1 to make it human-readable rank
+                if ($family->id === $userFamily->id) {
+                    $numberOfUsersFirstFamily = $usersCount;
+                } else {
+                    $numberOfUsersSecondFamily = $usersCount;
                 }
             }
+
+
+
+
+
+            // if ($userFamily) {
+            //     // Sve familije sortirane od najvece valuation
+            //     $sortedFamilynames = Familyname::orderBy('valuation', 'desc')->get();
+            //     // User rank of prve family id
+            //     $userRank = $sortedFamilynames->search(function ($family) use ($userFamily) {
+            //         return $family->id === $userFamily->id;
+            //     });
+            //     if ($userRank !== false) {
+            //         $rank = $userRank + 1;
+            //     }
+            // }
+            // // Sve familije attachane za usera
+            // $userAttachedFamilies = $user->familynames;
+            // // Broj Pripadnika familije
+            // $numberOfUsersFirstFamily = 0;
+            // $numberOfUsersSecondFamily = 0;
+            // foreach ($userAttachedFamilies as $family) {
+            //     // Racunanje korisnika za familiju
+            //     $usersCount = $family->users->count();
+                
+            //     if ($family->id === $userFamily->id) {
+            //         $numberOfUsersFirstFamily = $usersCount;
+            //     } else {
+            //         $numberOfUsersSecondFamily += $usersCount;
+            //     }
+            // }
+
+            // // If the user has more than one attached family, calculate the rank for the second family
+            // if ($userAttachedFamilies->count() > 1) {
+            //     $secondFamily = $userAttachedFamilies->skip(1)->first();
+            //     $secondFamilyRank = $sortedFamilynames->search(function ($family) use ($secondFamily) {
+            //         return $family->id === $secondFamily->id;
+            //     });
+                
+            //     if ($secondFamilyRank !== false) {
+            //         $secondFamilyRank += 1; // Adding 1 to make it human-readable rank
+            //     }
+            // }
         
             return view('MyAccount', [
                 'account_id' => $account_id,
@@ -153,6 +238,7 @@ class AdminController extends Controller
         }
     }
 
+
     public function showRegisterFamily()
     {
         $apiUrl = 'https://restcountries.com/v3.1/all';
@@ -165,48 +251,6 @@ class AdminController extends Controller
             $countries[$name] = $name;
         }
         return view('family.register', compact('countries'));
-    }
-    public function registerFamily(Request $request)
-    {
-        $user = Auth::user();
-        if ($user->familynames()->count() >= 2) {
-            return redirect()->back()->with('error', 'You can only register a maximum of 2 family names.');
-        }
-        $familyName = $request->input('family_name');
-        $country = $request->input('country');
-        $flag_url = $request->input('flag_url');
-        $valuation = $request->input('valuation');
-
-        $firstLetter = substr($familyName, 0, 1);
-
-        // Generate the consonants from the user's name
-        $consonants = preg_replace('/[aeiou\d]/i', '', $familyName);
-        // If the first letter is a vowel, remove it from the consonants
-        if (preg_match('/[aeiou\d]/i', $firstLetter)) {
-            $familyCodeName = $firstLetter . $consonants;
-        } else {
-            // If the first letter is a consonant, use it only once
-            $familyCodeName = $firstLetter . substr($consonants, 1);
-        }
-        // Generate a random six-digit number
-        $randomNumber = mt_rand(100000, 999999);
-
-        // Append the random number to the familyCode ID
-        $familyCodeName .= $randomNumber;
-
-        $family = new Familyname([
-            'family_name' => $familyName,
-            'country' => $country,
-            'flag_url' => $flag_url,
-            'valuation' => $valuation,
-            'family_code' => $familyCodeName
-        ]);
-
-        $family->save();
-        $user->price_paid += $valuation;
-        $user->save();
-        $user->familynames()->attach($family, ['supported_amount' => $valuation]);
-        return redirect()->route('myAccount', ['account_id' => $user->account_id]);
     }
 
     public function showFamilyPage($family_code)
@@ -231,47 +275,6 @@ class AdminController extends Controller
             return view('family/register-existing', ['family_code' => $family_code], compact('family'));
         } catch (ModelNotFoundException $exception) {
             return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
-        }
-    }
-    public function familyRegistrationExisting(Request $request, $family_code)
-    {
-        $user = Auth::user();
-        if ($user->familynames()->count() >= 2) {
-            return redirect()->back()->with('error', 'You can only register a maximum of 2 family names.');
-        }
-        
-        $family = Familyname::where('family_code', $family_code)->firstOrFail();
-        
-        // Check if the user is already registered with the family
-        if ($user->familynames->contains($family)) {
-            // Update the valuation of the existing family registration
-            $amount = $request->input('valuation');
-            $user->price_paid += $amount;
-        
-            // Get the pivot model for the user-family relationship
-            $pivotModel = $user->familynames()->where('familyname_id', $family->id)->first()->pivot;
-        
-            // Update the supported_amount in the pivot model
-            $existingSupportedAmount = $pivotModel->supported_amount ?? 0;
-            $updatedSupportedAmount = $existingSupportedAmount + $amount;
-            $pivotModel->supported_amount = $updatedSupportedAmount;
-            $pivotModel->save();
-        
-            // Update the user and family models
-            $user->save();
-            $family->valuation += $amount;
-            $family->save();
-        
-            return redirect()->route('myAccount', ['account_id' => $user->account_id])->with('success', 'Family supported successfully');
-        } else {
-            // If not registered, attach the family to the user
-            $amount = $request->input('valuation');
-            $user->price_paid += $amount;
-            $user->save();
-            $family->valuation += $amount;
-            $family->save();
-            $user->familynames()->attach($family, ['supported_amount' => $amount]);
-            return redirect()->route('myAccount', ['account_id' => $user->account_id]);
         }
     }
     public function uploadAvatar(Request $request)
@@ -332,45 +335,6 @@ class AdminController extends Controller
         $family = Familyname::where('family_code', $family_code)->firstOrFail();
         return view('support-family', compact('family'));
     }
-    public function supportFamily(Request $request, $family_code)
-{
-    $user = Auth::user();
-    $family = Familyname::where('family_code', $family_code)->firstOrFail();
-    $amount = $request->input('valuation');
-    
-    // Find if there's an existing support record for the user and family
-    $existingSupport = FamilynameSupport::where('user_id', $user->id)
-        ->where('familyname_id', $family->id)
-        ->first();
-    
-    if ($existingSupport) {
-        // Update the existing support amount
-        $user->price_paid += $amount;
-        $user->save();
-
-        $existingSupport->support_amount += $amount;
-        $existingSupport->save();
-
-        $family->valuation += $amount;
-        $family->save();
-    } else {
-        // Create a new support record
-
-        $family->valuation += $amount;
-        $family->save();
-        
-        $newSupport = new FamilynameSupport([
-            'user_id' => $user->id,
-            'familyname_id' => $family->id,
-            'support_amount' => $amount
-        ]);
-        $newSupport->save();
-    }
-    
-    // Update family's valuation and user's price_paid
-    return redirect()->route('myAccount', ['account_id' => $user->account_id])
-        ->with('success', 'Family supported successfully');
-}
 
     public function getUserQuote($userId)
     {

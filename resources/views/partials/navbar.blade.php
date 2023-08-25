@@ -1,8 +1,8 @@
-<nav class="bg-white border-gray-200 dark:bg-gray-900">
+<nav class="bg-white border-gray-200 dark:bg-gray-900 shadow-md shadow-md-purple">
   <div class="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-4">
   <a href="/" class="flex items-center">
       <img src="{{asset('storage/images/royalfamilynames.png')}}" class="h-12 mr-3" alt="Flowbite Logo" />
-      <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white max-md:hidden">Royal Family Names</span>
+      <span class="self-center text-2xl text-gray-700 font-semibold whitespace-nowrap dark:text-white max-md:hidden">Royal Family Names</span>
   </a>
   <div class="flex items-center md:order-2 gap-x-2">
     @if (Auth::user())
@@ -68,7 +68,7 @@
   <div class="items-center justify-between hidden w-full md:flex md:w-auto md:order-1" id="navbar-user">
     <ul class="flex flex-col font-medium p-4 md:p-0 mt-4 border border-gray-100 rounded-lg bg-gray-50 md:flex-row md:space-x-8 md:mt-0 md:border-0 md:bg-white dark:bg-gray-800 md:dark:bg-gray-900 dark:border-gray-700">
       <li>
-        <a href="/" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
+        <a href="/" class="block py-2 pl-3 pr-4 text-white bg-blue-700 rounded md:bg-transparent hover:text-blue-600 md:text-blue-700 md:p-0 md:dark:text-blue-500" aria-current="page">Home</a>
       </li>
       <li>
         <a href="/about" class="block py-2 pl-3 pr-4 text-gray-900 rounded hover:bg-gray-100 md:hover:bg-transparent md:hover:text-blue-700 md:p-0 dark:text-white md:dark:hover:text-blue-500 dark:hover:bg-gray-700 dark:hover:text-white md:dark:hover:bg-transparent dark:border-gray-700">About</a>
@@ -171,3 +171,8 @@
       </div>
   </div>
 </div>
+<style>
+  .shadow-md-purple {
+    box-shadow: 0 4px 5px 2px rgba(155, 89, 182, 0.1), 0 2px 4px -1px rgba(82, 87, 130, 0.4);
+  }
+</style>

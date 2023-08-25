@@ -11,7 +11,11 @@ RoyalFamilyNames - Register
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Register your account</h2>
     </div>
-  
+    @if(session('error'))
+      <div class="alert alert-danger text-red-700">
+          {{ session('error') }}
+      </div>
+    @endif
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" action="{{ route('register') }}" method="POST">
         @csrf

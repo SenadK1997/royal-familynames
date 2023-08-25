@@ -73,24 +73,27 @@
       @else
       {{-- Get the family with the highest valuation --}}
       @php
-          $highestValuationFamily = $userAttachedFamilies->sortByDesc('valuation')->first();
+          $highestValuationFamilies = $userAttachedFamilies->sortByDesc('valuation')->values()->all();
+          // dd($highestValuationFamilies);
       @endphp
+
       @if(session('success'))
         <div class="alert alert-danger text-green-700">
             {{ session('success') }}
         </div>
       @endif
-
       {{-- First family --}}
       <div class="w-full min-w-sm mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
           <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-300 flex mx-auto w-full justify-center gap-x-2">Your Family name
-              <a href="/family/{{ $highestValuationFamily->family_code }}" class="text-blue-500">
-                  {{ $highestValuationFamily->family_name }}
+              <a href="/family/{{ $highestValuationFamilies[0]->family_code }}" class="text-blue-500">
+                  {{ $highestValuationFamilies[0]->family_name }}
               </a>
               rank is:
           </h5>
           <div class="flex items-baseline text-gray-900 dark:text-white mx-auto w-full justify-center">
-              <span class="text-9xl font-extrabold tracking-tight {{ $rank === 1 ? 'text-[#FFD700] font-bold' : ($rank === 2 ? 'text-[#C0C0C0]' : ($rank === 3 ? 'text-[#CD7F32]' : 'text-gray-800')) }}">{{ $rank }}</span>
+              <span class="text-9xl font-extrabold tracking-tight {{ $rank === 1 ? 'text-[#FFD700] font-bold' : ($rank === 2 ? 'text-[#C0C0C0]' : ($rank === 3 ? 'text-[#CD7F32]' : 'text-gray-800')) }}">
+                {{ $rank }}
+              </span>
           </div>
           <ul role="list" class="space-y-5 my-7">
             <li class="flex space-x-3 items-center mx-auto w-full justify-center">
@@ -103,7 +106,7 @@
           <button type="button" class="gap-x-2 items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center">
               <span class="text-xl font-normal tracking-tight text-gray-100">Total valuation: </span>
               <div class="whitespace-nowrap">
-                  <span class="text-2xl font-extrabold tracking-tight text-green-300">{{ $highestValuationFamily->valuation }}<span class="text-lg font-bold tracking-tight">.00</span></span>
+                  <span class="text-2xl font-extrabold tracking-tight text-green-300">{{ $highestValuationFamilies[0]->valuation }}<span class="text-lg font-bold tracking-tight">.00</span></span>
                   <span class="text-xl font-semibold text-green-300">$</span>
               </div>
           </button>
@@ -112,8 +115,8 @@
       @if ($userAttachedFamilies->count() > 1)
       <div class="w-full min-w-sm mx-auto p-4 bg-white border border-gray-200 rounded-lg shadow sm:p-8 dark:bg-gray-800 dark:border-gray-700">
         <h5 class="mb-4 text-2xl font-medium text-gray-500 dark:text-gray-300 flex mx-auto w-full justify-center gap-x-2">Your Family name
-          <a href="/family/{{ $userAttachedFamilies->skip(1)->first()->family_code }}" class="text-blue-500">
-            {{ $userAttachedFamilies->skip(1)->first()->family_name }}
+          <a href="/family/{{ $highestValuationFamilies[1]->family_code }}" class="text-blue-500">
+            {{ $highestValuationFamilies[1]->family_name }}
           </a>
           rank is:
         </h5>
@@ -131,7 +134,7 @@
         <button type="button" class="gap-x-2 items-center text-white bg-blue-600 hover:bg-blue-700 focus:ring-4 focus:outline-none focus:ring-blue-200 dark:focus:ring-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 inline-flex justify-center w-full text-center">
           <span class="text-xl font-normal tracking-tight text-gray-100">Total valuation: </span>
           <div class="whitespace-nowrap">
-            <span class="text-2xl font-extrabold tracking-tight text-green-300">{{ $userAttachedFamilies->skip(1)->first()->valuation }}<span class="text-lg font-bold tracking-tight">.00</span></span>
+            <span class="text-2xl font-extrabold tracking-tight text-green-300">{{ $highestValuationFamilies[1]->valuation }}<span class="text-lg font-bold tracking-tight">.00</span></span>
             <span class="text-xl font-semibold text-green-300">$</span>
           </div>
           </button>

@@ -16,10 +16,11 @@ use App\Http\Controllers\DonationController;
 |
 */
 
-Route::get('/', function() {
-    $familynames = Familyname::all();
-    return view ('LandingPage', compact('familynames'));
-});
+// Route::get('/', function() {
+//     $familynames = Familyname::all();
+//     return view ('LandingPage', compact('familynames'));
+// });
+Route::get('/', [AdminController::class, 'homepage'])->name('homepage');
 
 Route::get('/about', [AdminController::class, 'showAbout'])->name('about');
 
