@@ -14,13 +14,19 @@ use Intervention\Image\Facades\Image;
 
 class AdminController extends Controller
 {
-    public function homepage()
+    public function homepage(Request $request)
     {
-        $familynames = Familyname::orderBy('valuation', 'desc')->paginate(10);
-        // $paginator->firstItem();
-        // $sortedFamilynames = $familynames->sortByDesc('valuation');
+        $searchQuery = $request->input('query');
+        
+        $familynames = Familyname::when($searchQuery, function ($query) use ($searchQuery) {
+            return $query->where('family_name', 'like', '%' . $searchQuery . '%');
+        })
+        ->orderBy('valuation', 'desc')
+        ->paginate(10);
+    
         $ranking = ($familynames->currentPage() - 1) * $familynames->perPage() + 1;
-        return view ('LandingPage', compact('familynames', 'ranking'));
+    
+        return view('LandingPage', compact('familynames', 'ranking', 'searchQuery'));
     }
     public function showAbout()
     {

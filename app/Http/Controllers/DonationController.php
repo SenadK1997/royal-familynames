@@ -13,7 +13,7 @@ class DonationController extends Controller
     public function registerFamily(Request $request)
     {
         $user = Auth::user();
-        $familyName = $request->input('family_name');
+        $familyName = ucwords($request->input('family_name'));
         $country = $request->input('country');
         $flag_url = $request->input('flag_url');
         $valuation = $request->input('amount');

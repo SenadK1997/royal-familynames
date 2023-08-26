@@ -4,10 +4,8 @@
 @endsection
 
 @section('content')
-{{-- <div id="data-container" class="loading"> --}}
   @include('partials.loading')
-{{-- </div> --}}
-  <main class="w-full mx-auto flex flex-wrap max-md:flex max-md:flex-col">
+  <main class="w-full mx-auto flex justify-center flex-wrap max-md:flex max-md:flex-col">
     <div class="relative max-md:max-w-full isolate overflow-hidden pt-16 lg:mx-auto">
       <header class="pb-4 pt-6 sm:pb-6">
         <div class="max-md:gap-y-4 mx-auto max-md:flex max-md:flex-col flex max-w-7xl lg:max-w-full lg:w-[1280px] flex-wrap items-center gap-6 max-md:gap-0 px-4 lg:px-8 max-md:px-0">
@@ -22,15 +20,15 @@
           </a>
         </div>
       </header>
-      <div class="border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5 max-md:max-w-full max-md:w-full max-md:mx-auto">
-        <dl class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
-            <div class="max-md:py-4 flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8">
-                <dt class="text-lg font-medium leading-6 text-gray-500 text-center w-full">Total valuation:</dt>
-                <dd class="w-full flex-none text-3xl text-green-600 font-medium leading-10 tracking-tight text-gray-900 text-center">{{ $family->valuation }}.00 $</dd>
+      <div class="flex justify-center w-full border-b border-b-gray-900/10 lg:border-t lg:border-t-gray-900/5 max-md:max-w-full max-md:w-full max-md:mx-auto">
+        <div class="mx-auto grid max-w-7xl grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 lg:px-2 xl:px-0">
+            <div class="max-md:py-4 flex items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-8 sm:px-6 lg:border-t-0 xl:px-8">
+              <div class="text-lg font-medium leading-6 text-gray-500 text-center w-full">Total valuation:</div>
+              <div class="w-full flex-none text-3xl text-green-600 font-medium leading-10 tracking-tight text-gray-900 text-center">{{ $family->valuation }}.00 $</div>
             </div>
             @foreach ($users->sortByDesc('pivot.supported_amount')->take(3) as $index => $supporter)
-                <div class="max-md:py-4 flex text-center items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-10 sm:px-6 lg:border-t-0 xl:px-8 max-md:flex max-md:flex-col">
-                    <dt class="text-lg font-bold leading-6 text-gray-700 flex items-center gap-x-2 justify-center flex w-full">
+                <div class="max-md:py-4 flex text-center items-baseline flex-wrap justify-between gap-y-2 gap-x-4 border-t border-gray-900/5 px-4 py-8 sm:px-6 lg:border-t-0 xl:px-8 max-md:flex max-md:flex-col">
+                    <div class="text-lg font-bold leading-6 text-gray-700 flex items-center gap-x-2 justify-center flex w-full">
                       @if ($supporter->avatar === null)
                           <span class="inline-block h-7 w-7 overflow-hidden rounded-full bg-gray-100">
                             <svg class="h-full w-full text-gray-300" fill="blue" viewBox="0 0 24 24">
@@ -43,7 +41,7 @@
                           </span>
                           @endif
                       {{ $supporter->name }}
-                    </dt>
+                    </div>
                     <dd class="text-xs font-medium text-rose-600 flex w-full justify-center text-center">
                         <div class="rounded-md py-1 px-2 text-xs font-medium ring-1 ring-inset text-green-700 bg-green-50 ring-green-600/20">{{ $supporter->account_id }}</div>
                     </dd>
@@ -52,39 +50,39 @@
                     </dd>
                 </div>
             @endforeach
-        </dl>
+        </div>
       </div>
       <div class="absolute left-0 top-full -z-10 mt-96 origin-top-left translate-y-40 -rotate-90 transform-gpu opacity-20 blur-3xl sm:left-1/2 sm:-ml-96 sm:-mt-10 sm:translate-y-0 sm:rotate-0 sm:transform-gpu sm:opacity-50" aria-hidden="true">
         <div class="aspect-[1154/678] w-[72.125rem] bg-gradient-to-br from-[#FF80B5] to-[#9089FC]" style="clip-path: polygon(100% 38.5%, 82.6% 100%, 60.2% 37.7%, 52.4% 32.1%, 47.5% 41.8%, 45.2% 65.6%, 27.5% 23.4%, 0.1% 35.3%, 17.9% 0%, 27.7% 23.4%, 76.2% 2.5%, 74.2% 56%, 100% 38.5%)"></div>
       </div>
     </div>
-  
     <div class="space-y-16 py-8 xl:space-y-20 max-lg:mx-auto lg:mx-auto lg:max-w-full lg:w-[1280px] max-md:w-full">
       <div>
         <div class="mt-2 overflow-hidden border-t border-gray-100">
           <div class="mx-auto max-w-7xl px-4 lg:px-8 max-md:max-w-full max-md:flex">
             <div class="mx-auto max-w-2xl max-md:max-w-full max-md:w-full lg:mx-0 lg:max-w-none">
-              <table class="w-full text-left">
-                <thead class="sr-only">
-                  <tr>
-                    <th>Amount</th>
-                    <th class="hidden sm:table-cell">Client</th>
-                    <th>More details</th>
-                  </tr>
-                </thead>
-                <tbody class="mx-auto max-md:flex max-md:flex-col max-md:mx-auto max-md:max-w-full max-md:divide-y max-md:divide-gray-200 max-md:table-auto">
-                  <tr class="text-sm leading-6 text-gray-900 flex gap-x-6">
-                    <th scope="colgroup" colspan="3" class="relative isolate py-2 font-semibold">
-                        <h3>Family members</h3>
-                        <div class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
-                        <div class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
-                      </th>
-                  </tr>
+              <div class="w-full text-left">
+                <div class="sr-only">
+                  <div class="flex">
+                    <div class="w-1/3">Amount</div>
+                    <div class="hidden sm:table-cell w-1/3">Client</div>
+                    <div class="w-1/3">More details</div>
+                  </div>
+                </div>
+                <div class="mx-auto max-md:flex max-md:flex-col max-md:mx-auto max-md:max-w-full max-md:divide-y max-md:divide-gray-200 max-md:table-auto">
+                  <div class="text-sm leading-6 text-gray-900 flex gap-x-6">
+                    <div class="relative isolate py-2 font-semibold" colspan="3">
+                      <h3>Family members</h3>
+                      <div class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
+                      <div class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
+                    </div>
+                  </div>
                   {{-- MEMBERS --}}
                   @if ($users->count() > 0)
+                  <div class="max-h-[250px] px-3 overflow-y-scroll w-full max-md:max-h-[400px]">
                   @foreach ($users as $user)
-                  <tr class="max-md:flex max-md:flex-col max-md:mx-auto max-md:w-full max-md:border-b-2 max-md:justify-center">
-                    <td class="relative py-5 pr-6 max-md:mx-auto">
+                  <div class="flex items-center w-full justify-between max-md:flex max-md:flex-col max-md:mx-auto max-md:w-full max-md:border-b-2 max-md:justify-center">
+                    <div class="relative py-5 pr-6 max-md:mx-auto">
                       <div class="flex gap-x-6 items-center">
                         @if ($user->avatar === null)
                           <span class="inline-block h-7 w-7 overflow-hidden rounded-full bg-gray-100">
@@ -92,7 +90,7 @@
                               <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                             </svg>
                           </span>
-                          @else
+                        @else
                           <span class="relative inline-block">
                             <img class="h-8 w-8 rounded-full" src="{{ asset('storage/images/' . Auth::user()->avatar) }}" alt="">
                           </span>
@@ -106,10 +104,10 @@
                             <p>Total paid amount:</p>
                             <div class="flex flex-col">
                               @foreach ($user->familynames as $userSupported)  
-                              <div class="flex">
+                                <div class="flex">
                                   <p class="text-gray-400 font-bold">{{ $userSupported->family_name }}:&nbsp;</p>
-                                <p class="text-green-700 font-bold">{{ $userSupported->pivot->supported_amount }}.00 $</p>
-                              </div>
+                                  <p class="text-green-700 font-bold">{{ $userSupported->pivot->supported_amount }}.00 $</p>
+                                </div>
                               @endforeach
                             </div>
                           </div>
@@ -117,11 +115,11 @@
                       </div>
                       <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100 max-md:hidden"></div>
                       <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100 max-md:hidden"></div>
-                    </td>
+                    </div>
                     @if ($user->website_url === null && $user->instagram_url === null && $user->linkedin_url === null && $user->twitter_url === null && $user->tiktok_url === null)
-                        <td class="text-blue-700 flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">No links to social media</td>
+                        <div class="text-blue-700 flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">No links to social media</div>
                     @else
-                    <td class="flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">
+                    <div class="flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">
                       @if ($user->website_url)
                         <a href="{{ $user->website_url }}">
                           <svg stroke="currentColor" fill="blue" stroke-width="0" viewBox="0 0 24 24" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M4,12c0-0.899,0.156-1.762,0.431-2.569L6,11l2,2 v2l2,2l1,1v1.931C7.061,19.436,4,16.072,4,12z M18.33,16.873C17.677,16.347,16.687,16,16,16v-1c0-1.104-0.896-2-2-2h-4v-2v-1 c1.104,0,2-0.896,2-2V7h1c1.104,0,2-0.896,2-2V4.589C17.928,5.778,20,8.65,20,12C20,13.835,19.373,15.522,18.33,16.873z"></path></svg>
@@ -147,9 +145,9 @@
                           <svg stroke="#00f2ea" fill="#ff0050" stroke-width="2" role="img" viewBox="0 0 24 24" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><title></title><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg>
                         </a>
                       @endif
-                    </td>
+                    </div>
                     @endif
-                    <td class="py-5 text-right max-md:w-full max-md:justify-center max-md:text-center">
+                    <div class="py-5 text-right max-md:w-full max-md:justify-center max-md:text-center">
                       <button class="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500 view-quote-button"
                               data-user-id="{{ $user->id }}"
                               data-modal-target="quoteModal">
@@ -172,26 +170,28 @@
                             </div>
                         </div>
                       </div>
-                    </td>
-                  </tr>
+                    </div>
+                  </div>
                   @endforeach
+                  </div>
                   @else
                         <p>No users found in this family.</p>
                   @endif
-                  <tr class="text-sm leading-6 text-gray-900">
-                    <th scope="colgroup" colspan="3" class="relative isolate py-2 font-semibold">
+                  <div class="text-sm leading-6 text-gray-900">
+                    <div class="relative isolate py-2 font-semibold">
                       <h3>Family supporters</h3>
                       <div class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
                       <div class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
-                    </th>
-                  </tr>
+                    </div>
+                  </div>
                   {{-- SUPPORTERS --}}
                   @if ($supporters->isEmpty())
-                      <td class="text-green-600">No supporters for this family yet.</td>
+                    <div class="text-green-600">No supporters for this family yet.</div>
                   @else
+                  <div class="max-h-[250px] overflow-y-scroll w-full max-md:h-[400px] max-md:max-h-[400px]">
                   @foreach ($supporters as $supporter)
-                    <tr class="max-md:flex max-md:flex-col max-md:mx-auto max-md:w-full max-md:justify-center max-md:border-b-2">
-                      <td class="relative py-5 pr-6 max-md:mx-auto">
+                    <div class="flex px-3 items-center w-full justify-between max-md:flex max-md:flex-col max-md:mx-auto max-md:w-full max-md:justify-center max-md:border-b-2">
+                      <div class="relative py-5 pr-6 max-md:mx-auto">
                         <div class="flex gap-x-6 items-center">
                           @if ($user->avatar === null)
                             <span class="inline-block h-7 w-7 overflow-hidden rounded-full bg-gray-100">
@@ -199,7 +199,7 @@
                                 <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
                               </svg>
                             </span>
-                            @else
+                          @else
                             <span class="relative inline-block">
                               <img class="h-8 w-8 rounded-full" src="{{ asset('storage/images/' . Auth::user()->avatar) }}" alt="">
                             </span>
@@ -211,17 +211,17 @@
                             </div>
                             <div class="flex mt-1 text-xs leading-5 text-gray-500 gap-x-2">
                               <p>Total paid amount:</p>
-                                <p class="text-green-700 font-bold">{{ $supporter->pivot->support_amount }}.00 $</p>
+                              <p class="text-green-700 font-bold">{{ $supporter->pivot->support_amount }}.00 $</p>
                             </div>
                           </div>
                         </div>
                         <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100 max-md:hidden"></div>
                         <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100 max-md:hidden"></div>
-                      </td>
+                      </div>                      
                       @if ($supporter->website_url === null && $supporter->instagram_url === null && $supporter->linkedin_url === null && $supporter->twitter_url === null && $supporter->tiktok_url === null)
-                        <td class="text-blue-700 flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">No links to social media</td>
+                        <div class="text-blue-700 flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">No links to social media</div>
                       @else
-                      <td class="flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">
+                      <div class="flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">
                         @if ($supporter->website_url)
                           <a href="{{ $supporter->website_url }}">
                             <svg stroke="currentColor" fill="blue" stroke-width="0" viewBox="0 0 24 24" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><path d="M12,2C6.486,2,2,6.486,2,12s4.486,10,10,10s10-4.486,10-10S17.514,2,12,2z M4,12c0-0.899,0.156-1.762,0.431-2.569L6,11l2,2 v2l2,2l1,1v1.931C7.061,19.436,4,16.072,4,12z M18.33,16.873C17.677,16.347,16.687,16,16,16v-1c0-1.104-0.896-2-2-2h-4v-2v-1 c1.104,0,2-0.896,2-2V7h1c1.104,0,2-0.896,2-2V4.589C17.928,5.778,20,8.65,20,12C20,13.835,19.373,15.522,18.33,16.873z"></path></svg>
@@ -247,9 +247,9 @@
                             <svg stroke="#00f2ea" fill="#ff0050" stroke-width="2" role="img" viewBox="0 0 24 24" height="1.5em" width="1.5em" xmlns="http://www.w3.org/2000/svg"><title></title><path d="M12.53.02C13.84 0 15.14.01 16.44 0c.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z"></path></svg>
                           </a>
                         @endif
-                      </td>
+                        </div>
                       @endif
-                      <td class="py-5 text-right max-md:w-full max-md:justify-center max-md:text-center">
+                      <div class="py-5 text-right max-md:w-full max-md:justify-center max-md:text-center">
                         <div class="flex justify-end max-md:justify-center">
                           <button class="text-sm font-medium leading-6 text-indigo-600 hover:text-indigo-500 view-quote-button"
                               data-user-id="{{ $supporter->id }}"
@@ -257,12 +257,13 @@
                             View {{ $supporter->name }} Quote
                           </button>
                         </div>
-                      </td>
-                    </tr>
+                      </div>
+                    </div>
                   @endforeach
+                  </div>
                   @endif
-                </tbody>
-              </table>
+                  </div>
+                </div>
             </div>
           </div>
         </div>
