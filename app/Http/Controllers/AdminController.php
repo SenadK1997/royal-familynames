@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Http;
 use Intervention\Image\Facades\Image;
+use Illuminate\Foundation\Auth\RegistersUsers;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
 
 class AdminController extends Controller
 {
@@ -41,49 +43,37 @@ class AdminController extends Controller
     // Handle the registration form submission
     public function register(Request $request)
     {
-        // Get the user's name from the input
+        $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users',
+            'password' => 'required|string|min:8|confirmed', // The confirmed rule ensures password confirmation matches
+        ]);
         $name = $request->input('name');
-
-        // Extract the first letter of the user's name
         $firstLetter = substr($name, 0, 1);
-
-        // Generate the consonants from the user's name
         $consonants = preg_replace('/[aeiou\d]/i', '', $name);
-
-        // If the first letter is a vowel, remove it from the consonants
         if (preg_match('/[aeiou\d]/i', $firstLetter)) {
             $accountName = $firstLetter . $consonants;
         } else {
             // If the first letter is a consonant, use it only once
             $accountName = $firstLetter . substr($consonants, 1);
         }
-
-        // Generate a random six-digit number
         $randomNumber = mt_rand(100000, 999999);
-
-        // Append the random number to the account ID
         $accountName .= $randomNumber;
-
         $existingUser = User::where('email', $request->input('email'))->first();
         if ($existingUser) {
             return redirect()->back()->with('error', 'Email already in use');
-            // return response()->json(['message' => 'Email is already registered']);
         }
-        // Create and save the user to the database
         $user = new User([
             'name' => $name,
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
             'account_id' => $accountName, // Set the "Account ID"
         ]);
-
         $user->save();
-        // return redirect()->route('myAccount', ['account_id' => $accountName]);
+        $user->sendEmailVerificationNotification($user->id);
         $request->session()->flush();
-        return redirect()->route('login');
+        return view('auth.verify-email');
     }
-
-
     // Show the login form
     public function showLoginForm()
     {
@@ -116,28 +106,7 @@ class AdminController extends Controller
         $families = Familyname::all();
         try {
             $user = User::where('account_id', $account_id)->firstOrFail();
-
-            
             $userSupported = $user->getSupportedFamily;
-
-            // $userFamily = $user->familynames->first();
-            // $rank = null;
-            // $secondFamilyRank = null;
-            // $attachedFamilyCount = $user->familynames->count();
-
-            // if ($userFamily) {
-            //     // Sve familije sortirane od najvece valuation
-            //     $sortedFamilynames = Familyname::orderBy('valuation', 'desc')->get();
-                
-            //     // User rank of prve family id
-            //     $userRank = $sortedFamilynames->search(function ($family) use ($userFamily) {
-            //         return $family->id === $userFamily->id;
-            //     });
-                
-            //     if ($userRank !== false) {
-            //         $rank = $userRank + 1;
-            //     }
-            // }
             // Sve familije attachane za usera
             $userAttachedFamilies = $user->familynames;
             $sortedFamilynames = Familyname::orderBy('valuation', 'desc')->get();
@@ -187,50 +156,6 @@ class AdminController extends Controller
                     $numberOfUsersSecondFamily = $usersCount;
                 }
             }
-
-
-
-
-
-            // if ($userFamily) {
-            //     // Sve familije sortirane od najvece valuation
-            //     $sortedFamilynames = Familyname::orderBy('valuation', 'desc')->get();
-            //     // User rank of prve family id
-            //     $userRank = $sortedFamilynames->search(function ($family) use ($userFamily) {
-            //         return $family->id === $userFamily->id;
-            //     });
-            //     if ($userRank !== false) {
-            //         $rank = $userRank + 1;
-            //     }
-            // }
-            // // Sve familije attachane za usera
-            // $userAttachedFamilies = $user->familynames;
-            // // Broj Pripadnika familije
-            // $numberOfUsersFirstFamily = 0;
-            // $numberOfUsersSecondFamily = 0;
-            // foreach ($userAttachedFamilies as $family) {
-            //     // Racunanje korisnika za familiju
-            //     $usersCount = $family->users->count();
-                
-            //     if ($family->id === $userFamily->id) {
-            //         $numberOfUsersFirstFamily = $usersCount;
-            //     } else {
-            //         $numberOfUsersSecondFamily += $usersCount;
-            //     }
-            // }
-
-            // // If the user has more than one attached family, calculate the rank for the second family
-            // if ($userAttachedFamilies->count() > 1) {
-            //     $secondFamily = $userAttachedFamilies->skip(1)->first();
-            //     $secondFamilyRank = $sortedFamilynames->search(function ($family) use ($secondFamily) {
-            //         return $family->id === $secondFamily->id;
-            //     });
-                
-            //     if ($secondFamilyRank !== false) {
-            //         $secondFamilyRank += 1; // Adding 1 to make it human-readable rank
-            //     }
-            // }
-        
             return view('MyAccount', [
                 'account_id' => $account_id,
                 'rank' => $rank,
@@ -243,8 +168,6 @@ class AdminController extends Controller
             return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
         }
     }
-
-
     public function showRegisterFamily()
     {
         $apiUrl = 'https://restcountries.com/v3.1/all';
@@ -280,7 +203,7 @@ class AdminController extends Controller
             $family = Familyname::where('family_code', $family_code)->firstOrFail();
             return view('family/register-existing', ['family_code' => $family_code], compact('family'));
         } catch (ModelNotFoundException $exception) {
-            return redirect()->route('not_found'); // Redirect to a custom 404 page or handle the error in some other way.
+            return response()->json(['Message' => 'Not Found']); // Redirect to a custom 404 page or handle the error in some other way.
         }
     }
     public function uploadAvatar(Request $request)

@@ -17,7 +17,9 @@ return [
         'guard' => 'web',
         'passwords' => 'users',
     ],
-
+    // 'verification' => [
+    //     'enabled' => true,
+    // ],
     /*
     |--------------------------------------------------------------------------
     | Authentication Guards
