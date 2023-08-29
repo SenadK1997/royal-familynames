@@ -104,7 +104,7 @@
           <div class="p-6 text-center">
             <form action="{{ route('upload.avatar') }}" method="POST" enctype="multipart/form-data">
               @csrf
-              <input type="file" name="avatar" accept="image/*" class="mb-4" required>
+              <input type="file" name="avatar" accept="image/*" class="mb-4 w-[250px]" required>
               <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg">
                   Upload
               </button>
