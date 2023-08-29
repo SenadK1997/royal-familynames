@@ -23,28 +23,41 @@ RoyalFamilyNames - Register Family
     </div>
   
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" id="register-form">
-        {{-- @csrf --}}
+      <form class="space-y-6" action="{{ route('request.payment') }}" id="register-form" method="POST">
+        @csrf
         <div>
           <label for="family_name" class="block text-sm font-medium leading-6 text-gray-900">Enter your family name</label>
           <div class="mt-2">
             <input id="family_name" name="family_name" type="text" required class="capitalize px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-100">
           </div>
         </div>
-        <input id="flag_url" name="flag_url" type="hidden">
+        <input id="flag_url" name="flag_url" class="hidden">
         <div class="mb-4">
           <label for="country" class="block text-sm font-medium text-gray-700">From</label>
           <div class="relative mt-1">
-              <input id="country" name="country" type="text" class="form-input px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-100" placeholder="Search for a country">
+              <input id="country" name="country" type="text" class="form-input px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-100" required placeholder="Search for a country">
               <div id="countryDropdown" class="absolute z-10 mt-1 w-full bg-white border border-gray-300 rounded-md shadow-lg hidden overflow-y-scroll h-64">
                   <!-- Options will be added here dynamically -->
               </div>
           </div>
         </div>
+        <div>
+          <label for="price" class="block text-sm font-medium leading-6 text-gray-900">Enter amount of support in -
+            <span class="text-green-600">
+              $ USD
+            </span> 
+          </label>
+          <div class="mt-2">
+            <input min="1" id="price" name="price" type="number" required class="capitalize px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-100">
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Submit</button>
+        </div>
       </form>
-      <button type="submit" class="w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" id="register-button">
+      {{-- <button type="submit" class="w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600" id="register-button">
         <div id="paypal-donate-button-container" class="flex mx-auto w-full justify-center"></div>
-      </button>
+      </button> --}}
     </div>
 </div>
 @endsection
@@ -71,6 +84,7 @@ RoyalFamilyNames - Register Family
           option.setAttribute('id', 'selected-country');
           option.addEventListener('click', function() {
               countryInput.value = country.name.common;
+              console.log(countryInput.value)
               document.getElementById('flag_url').value = country.flags.png; // Set the flag URL
               countryDropdown.classList.add('hidden');
           });
@@ -107,7 +121,7 @@ RoyalFamilyNames - Register Family
       }
   });
 </script>
-<script>
+{{-- <script>
   $(document).ready(function() {
     const registerButton = $('#register-button'); // Select the button element
     
@@ -140,8 +154,8 @@ RoyalFamilyNames - Register Family
       registerButton.hide();
     }
   }
-</script>
-<script>
+</script> --}}
+{{-- <script>
   PayPal.Donation.Button({
       env: 'sandbox',
       hosted_button_id: 'WW3RZCD4UHNXS',
@@ -183,7 +197,7 @@ RoyalFamilyNames - Register Family
           });
       },
   }).render('#paypal-donate-button-container');
-</script>
+</script> --}}
 @endpush
 @else
     <p>You need to be logged in to register a family.</p>

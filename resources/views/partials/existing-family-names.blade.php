@@ -14,7 +14,7 @@
   <div class="mb-4">
     <label for="family" class="block text-sm font-medium text-gray-700">Existing families</label>
     <div class="relative mt-1">
-      <form action="{{ route('register.existing', ['family_code' => ':family_code']) }}" id="familyForm" method="GET">
+      <form autocomplete="off" action="{{ route('register.existing', ['family_code' => ':family_code']) }}" id="familyForm" method="GET">
         @csrf
         <input type="hidden" value="">
         <input id="family" name="family" type="text" class="form-input px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" placeholder="Search from existing families">

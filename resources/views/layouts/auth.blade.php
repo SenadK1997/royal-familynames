@@ -14,7 +14,7 @@
     {{-- <link rel="stylesheet" href="path/to/select2.min.css"> --}}
     {{-- <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-rc.0/css/select2.min.css" rel="stylesheet"> --}}
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script>
+    {{-- <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script> --}}
 </head>
 <body>
     <div class="flex flex-col justify-between h-full">

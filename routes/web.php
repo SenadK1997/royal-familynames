@@ -49,12 +49,12 @@ Route::post('/logout', [AdminController::class, 'logout'])->name('logout');
 Route::middleware(['auth', 'verified'])->group(function() {
     // Family Register
     Route::get('/register/family', [AdminController::class, 'showRegisterFamily'])->name('family.registration');
-    Route::post('/register/family', [DonationController::class, 'registerFamily'])->name('family.register');
+    // Route::post('/register/family', [DonationController::class, 'registerFamily'])->name('family.register');
 
     // Register to existing family page SHOW
     Route::get('/register/existing/{family_code?}', [AdminController::class, 'registerExistingFamily'])->name('register.existing');
     // Register to existing family page REGISTER
-    Route::post('/register/existing/family', [DonationController::class, 'familyRegistrationExisting'])->name('familyRegistrationExisting');
+    // Route::post('/register/existing/family', [DonationController::class, 'familyRegistrationExisting'])->name('familyRegistrationExisting');
 
     
 
@@ -70,7 +70,17 @@ Route::middleware(['auth', 'verified'])->group(function() {
     Route::get('/get-user-quote/{userId}', [AdminController::class, 'getUserQuote']);
     // Support Family Page
     Route::get('support/family/{family_code?}', [AdminController::class, 'showSupportFamily'])->name('support.family');
-    Route::post('support/family', [DonationController::class, 'supportFamily'])->name('supportFamily');
+    // Route::post('support/family', [DonationController::class, 'supportFamily'])->name('supportFamily');
+    // NEW FAMILY REGISTRATION PAYPAL
+    Route::post('/request-payment', [DonationController::class, 'requestPayment'])->name('request.payment');
+    Route::get('/payment/success', [DonationController::class, 'paymentSuccess'])->name('payment.success');
+    Route::get('/payment/cancel', [DonationController::class, 'paymentCancel'])->name('payment.cancel');
+    // EXISTING FAMILY PAYPAL
+    Route::post('/request-payment/existing', [DonationController::class, 'requestExisting'])->name('request.existing');
+    Route::get('/payment/success/existing', [DonationController::class, 'existingSuccess'])->name('existing.success');
+    // SUPPORT FAMILY PAYPAL
+    Route::post('/request-payment/support', [DonationController::class, 'requestSupport'])->name('request.support');
+    Route::get('/payment/success/support', [DonationController::class, 'supportSuccess'])->name('support.success');
 });
 
 

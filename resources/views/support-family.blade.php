@@ -18,39 +18,51 @@ RoyalFamilyNames || {{ $family->family_name }}
         <div class="flex w-full mx-auto text-red-500 justify-center text-lg font-bold">{{ $family->family_code }}</div>
     </div>
   
-    <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-sm">
-      <div class="space-y-6">
-        <div>
-          <label for="family_name" class="block text-sm font-medium leading-6 text-gray-900">Family name</label>
-          @if(session('error'))
-            <div class="alert alert-danger text-red-700">
-                {{ session('error') }}
+    <form action="{{ route('request.support') }}" class="mt-8 sm:mx-auto sm:w-full sm:max-w-sm" method="POST">
+      @csrf
+        <div class="space-y-6">
+          <div>
+            <label for="family_name" class="block text-sm font-medium leading-6 text-gray-900">Family name</label>
+            @if(session('error'))
+              <div class="alert alert-danger text-red-700">
+                  {{ session('error') }}
+              </div>
+            @endif
+            <div class="mt-2">
+              <input id="family_name" name="family_name" type="text" required class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" disabled value="{{ $family->family_name }}">
             </div>
-          @endif
-          <div class="mt-2">
-            <input id="family_name" name="family_name" type="text" required class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" disabled value="{{ $family->family_name }}">
+            <input type="text" value="{{$family->family_code}}" name="family_code" class="hidden">
           </div>
-        </div>
-        <div>
+          <div>
             <label for="country" class="block text-sm font-medium leading-6 text-gray-900">Country origin</label>
             <div class="mt-2">
               <input id="country" name="country" type="text" required class="px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6" disabled value="{{ $family->country }}">
             </div>
           </div>
-          <div id="paypal-donate-button-container" class="flex mx-auto w-full justify-center"></div>
-        {{-- <div>
-          <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Support {{ $family->family_name }}</button>
-        </div> --}}
-      </div>
+            {{-- <div id="paypal-donate-button-container" class="flex mx-auto w-full justify-center"></div> --}}
+            <div>
+              <label for="price" class="block text-sm font-medium leading-6 text-gray-900">Enter amount of support -
+                <span class="text-green-600">
+                  $ USD
+                </span> 
+              </label>
+              <div class="mt-2">
+                <input min="1" id="price" name="price" type="number" required class="capitalize px-2 block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 dark:bg-gray-100">
+              </div>
+            </div>
+          <div>
+            <button type="submit" class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">Support {{ $family->family_name }}</button>
+          </div>
+        </div>
         <div class="mt-8 flex w-full mx-auto text-red-500 justify-center text-[10px] font-normal">
             Note: You will not become member of the family by supporting. If you want to become a member of the family, go to your account and register to existing family
         </div>
-    </div>
+    </form>
 
 </div>
 @endsection
 @push('script')
-<script>
+{{-- <script>
   PayPal.Donation.Button({
       env: 'sandbox',
       hosted_button_id: 'WW3RZCD4UHNXS',
@@ -87,7 +99,7 @@ RoyalFamilyNames || {{ $family->family_name }}
           });
       },
   }).render('#paypal-donate-button-container');
-</script>
+</script> --}}
 
 @endpush
 @endauth
