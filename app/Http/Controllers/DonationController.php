@@ -107,6 +107,7 @@ class DonationController extends Controller
         $paypalToken = $provider->getAccessToken();
         $amount = $request->price;
         $amount = str_replace(',', '', $amount);
+
         $response = $provider->createOrder([
             "intent" => "CAPTURE",
             "application_context" => [

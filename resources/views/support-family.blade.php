@@ -100,6 +100,6 @@ RoyalFamilyNames || {{ $family->family_name }}
       },
   }).render('#paypal-donate-button-container');
 </script> --}}
-
+<script src="https://www.paypal.com/sdk/js?client-id={{ env('PAYPAL_LIVE_CLIENT_ID') }}"></script>
 @endpush
 @endauth

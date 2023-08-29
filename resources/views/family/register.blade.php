@@ -198,6 +198,7 @@ RoyalFamilyNames - Register Family
       },
   }).render('#paypal-donate-button-container');
 </script> --}}
+<script src="https://www.paypal.com/sdk/js?client-id={{ env('PAYPAL_LIVE_CLIENT_ID') }}"></script>
 @endpush
 @else
     <p>You need to be logged in to register a family.</p>
