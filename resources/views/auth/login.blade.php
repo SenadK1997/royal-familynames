@@ -11,7 +11,11 @@ RoyalFamilyNames - Log in
     <div class="sm:mx-auto sm:w-full sm:max-w-sm">
       <h2 class="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">Log in to your account</h2>
     </div>
-  
+    @if(session('status'))
+      <div class="alert alert-success text-green-700">
+          {{ session('status') }}
+      </div>
+    @endif
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
       <form class="space-y-6" action="{{ route('login.post') }}" method="POST">
         @csrf
@@ -29,7 +33,7 @@ RoyalFamilyNames - Log in
           <div class="flex items-center justify-between">
             <label for="password" class="block text-sm font-medium leading-6 text-gray-900">Password</label>
             <div class="text-sm">
-              <a href="#" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
+              <a href="/forgot-password" class="font-semibold text-indigo-600 hover:text-indigo-500">Forgot password?</a>
             </div>
           </div>
           <div class="mt-2">
@@ -43,6 +47,6 @@ RoyalFamilyNames - Log in
       </form>
   
     </div>
-  </div>
+</div>
 @endsection
   

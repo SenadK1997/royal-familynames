@@ -6,8 +6,8 @@ RoyalFamilyNames
 
 @section('content')
 <div class="w-full max-w-screen-sm h-full p-4">
-    <img src="{{ asset('storage/images/longbanner2.png')}}" alt="" class="absolute w-[580px] h-[800px] top-13 left-[10%] px-2 ml-2 max-md:hidden max-[1400px]:hidden max-[1665px]:left-0 min-[1670px]:left-[6%] min-[2000px]:left-[12%] min-[2200px]:left-[17%]" style="opacity: 0.8">
-    <img src="{{ asset('storage/images/longbanner2.png')}}" alt="" class="absolute w-[580px] h-[800px] top-13 right-[10%] px-2 mr-2 max-md:hidden max-[1400px]:hidden max-[1665px]:right-0 min-[1670px]:right-[6%] min-[2000px]:right-[12%] min-[2200px]:right-[17%]" style="opacity: 0.8">
+    <img src="{{ asset('storage/images/longbanner2.png')}}" alt="" class="absolute w-[580px] h-[800px] md:h-[600px] top-13 left-[10%] px-2 ml-2 max-md:hidden max-[1400px]:hidden max-[1665px]:left-0 min-[1670px]:left-[6%] min-[2000px]:left-[12%] min-[2200px]:left-[17%]" style="opacity: 0.8">
+    <img src="{{ asset('storage/images/longbanner2.png')}}" alt="" class="absolute w-[580px] h-[800px] md:h-[600px] top-13 right-[10%] px-2 mr-2 max-md:hidden max-[1400px]:hidden max-[1665px]:right-0 min-[1670px]:right-[6%] min-[2000px]:right-[12%] min-[2200px]:right-[17%]" style="opacity: 0.8">
     {{-- @php
       $sortedFamilynames = $familynames->sortByDesc('valuation');
       $ranking = 1;

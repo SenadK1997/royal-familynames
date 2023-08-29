@@ -1,5 +1,5 @@
 <footer class="bg-white">
-    <div class="mx-auto max-w-7xl px-6 py-12 md:flex md:items-center md:justify-between lg:px-8">
+    <div class="mx-auto max-w-7xl px-6 py-12 max-h-[80px] md:flex md:items-center md:justify-between lg:px-8">
       <div class="flex justify-center space-x-6 md:order-2">
         <a href="https://www.linkedin.com/in/senad-kurtovi%C4%87-143742201/" target="_blank" class="text-gray-400 hover:text-gray-500">
           <span class="sr-only">Linkedin</span>

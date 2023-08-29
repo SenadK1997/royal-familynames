@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Models\Familyname;
 use App\Http\Controllers\DonationController;
+use App\Http\Controllers\ForgotPassword;
+use App\Http\Controllers\ForgotPasswordController;
 use App\Http\Controllers\VerificationController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -29,10 +31,15 @@ Route::get('/family/{family_code}', [AdminController::class, 'showFamilyPage'])-
 // Show login form and handle login
 Route::get('/login', [AdminController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AdminController::class, 'login'])->name('login.post');
+// FORGOT PASSWORD
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showForgotPassword'])->name('password.request');
+Route::post('/forgot-password', [ForgotPasswordController::class, 'sendResetLinkEmail'])->name('password.email');
+Route::get('password/reset/{token}', [ForgotPasswordController::class, 'showResetForm'])->name('password.reset');
+Route::post('/reset-password', [ForgotPasswordController::class, 'resetPassword'])->middleware('guest')->name('password.update');
+
 // EMAIL
 Route::post('email/verify/resend', [VerificationController::class, 'resend'])->name('verification.resend');
 Route::get('email/verify/notice', [VerificationController::class, 'showVerifyMail'])->name('verification.notice');
-// Route::get('email/verify/{id}/{hash}', [VerificationController::class, 'verify'])->name('verification.verify');
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
     $request->fulfill();
     return redirect()->route('homepage');
