@@ -71,7 +71,6 @@ class AdminController extends Controller
         ]);
         $user->save();
         $user->sendEmailVerificationNotification($user->id);
-        $request->session()->flush();
         return view('auth.verify-email');
     }
     // Show the login form
