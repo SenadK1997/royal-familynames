@@ -70,7 +70,6 @@ class AdminController extends Controller
             'account_id' => $accountName, // Set the "Account ID"
         ]);
         $user->save();
-        $user->sendEmailVerificationNotification($user->id);
         return view('auth.login');
     }
     // Show the login form
@@ -87,8 +86,15 @@ class AdminController extends Controller
         if (Auth::attempt($credentials)) {
             // Authentication successful
             $user = Auth::user();
-            return redirect()->route('homepage')->with('success', 'Logged in succesfully');
-        } 
+    
+            if (!$user->hasVerifiedEmail()) {
+                // Email not verified, trigger verification email
+                $user->sendEmailVerificationNotification($user->id);
+                return view('auth.verify-email');
+            }
+    
+            return redirect()->route('homepage')->with('success', 'Logged in successfully');
+        }
         return redirect()->route('login')
         ->withErrors(['email' => 'Invalid username or password'])
         ->withInput($request->except('password'));
