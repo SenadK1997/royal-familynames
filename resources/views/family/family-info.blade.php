@@ -92,7 +92,7 @@
                           </span>
                         @else
                           <span class="relative inline-block">
-                            <img class="h-8 w-8 rounded-full" src="{{ asset('storage/images/' . Auth::user()->avatar) }}" alt="">
+                            <img class="h-8 w-8 rounded-full" src="{{ asset('storage/images/' . $user->avatar) }}" alt="">
                           </span>
                         @endif
                         <div class="flex-auto">
@@ -201,7 +201,7 @@
                             </span>
                           @else
                             <span class="relative inline-block">
-                              <img class="h-8 w-8 rounded-full" src="{{ asset('storage/images/' . Auth::user()->avatar) }}" alt="">
+                              <img class="h-8 w-8 rounded-full" src="{{ asset('storage/images/' . $user->avatar) }}" alt="">
                             </span>
                           @endif
                           <div class="flex-auto">
