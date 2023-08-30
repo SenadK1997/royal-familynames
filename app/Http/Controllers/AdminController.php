@@ -222,26 +222,25 @@ class AdminController extends Controller
     public function uploadSocialMedia(Request $request)
     {
         $user = Auth::user();
-        $domain = 'http://';
         $website_url = $request->input('website');
         $instagram_url = $request->input('instagram');
         $linkedin_url = $request->input('linkedin');
         $twitter_url = $request->input('twitter');
         $tiktok_url = $request->input('tiktok');
         if ($website_url) {
-            $user->website_url = $domain . $website_url;
+            $user->website_url = $website_url;
         }
         if ($instagram_url) {
-            $user->instagram_url = $domain . $instagram_url;
+            $user->instagram_url = $instagram_url;
         }
         if ($linkedin_url) {
-            $user->linkedin_url = $domain . $linkedin_url;
+            $user->linkedin_url = $linkedin_url;
         }
         if ($twitter_url) {
-            $user->twitter_url = $domain . $twitter_url;
+            $user->twitter_url = $twitter_url;
         }
         if ($tiktok_url) {
-            $user->tiktok_url = $domain . $tiktok_url;
+            $user->tiktok_url = $tiktok_url;
         }
         
         $user->save();

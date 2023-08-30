@@ -5,7 +5,7 @@
 
 @section('content')
   @include('partials.loading')
-  <main class="w-full mx-auto flex justify-center flex-wrap max-md:flex max-md:flex-col">
+  <main class="w-full mx-auto flex flex-col justify-center flex-wrap max-md:flex max-md:flex-col">
     <div class="relative max-md:max-w-full isolate overflow-hidden pt-16 lg:mx-auto">
       <header class="pb-4 pt-6 sm:pb-6">
         <div class="max-md:gap-y-4 mx-auto max-md:flex max-md:flex-col flex max-w-7xl lg:max-w-full lg:w-[1280px] flex-wrap items-center gap-6 max-md:gap-0 px-4 lg:px-8 max-md:px-0">
