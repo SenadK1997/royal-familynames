@@ -88,7 +88,7 @@ class AdminController extends Controller
         if (Auth::attempt($credentials)) {
             // Authentication successful
             $user = Auth::user();
-            return redirect()->route('myAccount', ['account_id' => $user->account_id]);
+            return redirect()->route('homepage')->with('success', 'Logged in succesfully');
         } 
         return redirect()->route('login')
         ->withErrors(['email' => 'Invalid username or password'])
