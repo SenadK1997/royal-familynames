@@ -91,7 +91,7 @@
               rank is:
           </h5>
           <div class="flex items-baseline text-gray-900 dark:text-white mx-auto w-full justify-center">
-              <span class="text-9xl font-extrabold tracking-tight {{ $rank === 1 ? 'text-[#FFD700] font-bold' : ($rank === 2 ? 'text-[#C0C0C0]' : ($rank === 3 ? 'text-[#CD7F32]' : 'text-gray-800')) }}">
+              <span class="text-9xl font-extrabold tracking-tight {{ $rank === 1 ? 'text-[#FFD700] font-bold' : ($rank === 2 ? 'text-[#C0C0C0]' : ($rank === 3 ? 'text-[#CD7F32]' : 'text-gray-800 dark:text-white')) }}">
                 {{ $rank }}
               </span>
           </div>
