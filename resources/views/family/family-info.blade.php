@@ -306,7 +306,7 @@
                     // Construct the modal content
                     let content = `
                         <div class="px-4 text-center flex justify-start">
-                            ${data.avatar ? `<img class="h-5 w-5 rounded-full" src="${data.avatar}" alt="">` : '<span class="inline-block h-7 w-7 overflow-hidden rounded-full bg-gray-100"><svg class="h-full w-full text-gray-300" fill="blue" viewBox="0 0 24 24"><path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" /></svg></span>'}
+                            ${data.avatar ? `<img class="h-5 w-5 rounded-full" src="https://royalfamilynames.com/storage/images/${data.avatar}" alt="">` : '<span class="inline-block h-7 w-7 overflow-hidden rounded-full bg-gray-100"><svg class="h-full w-full text-gray-300" fill="blue" viewBox="0 0 24 24"><path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" /></svg></span>'}
                         </div>
                         <div class="mb-5 mt-5 text-lg font-normal text-gray-500 dark:text-gray-300 text-center">"${data.quote || 'User didn\'t added any quote'}"</div>
                     `;
