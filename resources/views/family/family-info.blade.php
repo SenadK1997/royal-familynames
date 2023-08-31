@@ -70,11 +70,11 @@
                   </div>
                 </div>
                 <div class="mx-auto max-md:flex max-md:flex-col max-md:mx-auto max-md:max-w-full max-md:divide-y max-md:divide-gray-200 max-md:table-auto">
-                  <div class="text-sm leading-6 text-gray-900 flex gap-x-6">
+                  <div class="text-sm text-gray-900 block gap-x-6 w-full">
                     <div class="relative isolate py-2 font-semibold" colspan="3">
-                      <h3>Family members</h3>
-                      <div class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
-                      <div class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
+                      <h3 class="text-gray-700 dark:text-white bg-gray-200 p-2 rounded w-full">Family members</h3>
+                      {{-- <div class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"></div> --}}
+                      {{-- <div class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"></div> --}}
                     </div>
                   </div>
                   {{-- MEMBERS --}}
@@ -179,14 +179,14 @@
                   @endif
                   <div class="text-sm leading-6 text-gray-900">
                     <div class="relative isolate py-2 font-semibold">
-                      <h3>Family supporters</h3>
-                      <div class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
-                      <div class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"></div>
+                      <h3 class="text-gray-700 dark:text-white bg-gray-200 p-2 rounded">Family supporters</h3>
+                      {{-- <div class="absolute inset-y-0 right-full -z-10 w-screen border-b border-gray-200 bg-gray-50"></div> --}}
+                      {{-- <div class="absolute inset-y-0 left-0 -z-10 w-screen border-b border-gray-200 bg-gray-50"></div> --}}
                     </div>
                   </div>
                   {{-- SUPPORTERS --}}
                   @if ($supporters->isEmpty())
-                    <div class="text-green-600">No supporters for this family yet.</div>
+                    <div class="text-green-600 p-2">No supporters for this family yet.</div>
                   @else
                   <div class="max-h-[250px] overflow-y-scroll w-full max-md:h-[400px] max-md:max-h-[400px]">
                   @foreach ($supporters as $supporter)
