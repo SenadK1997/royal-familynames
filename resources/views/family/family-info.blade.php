@@ -79,7 +79,7 @@
                   </div>
                   {{-- MEMBERS --}}
                   @if ($users->count() > 0)
-                  <div class="max-h-[250px] px-3 overflow-y-scroll w-full max-md:max-h-[400px]">
+                  <div class="max-h-[250px] max-w-[1216px] px-3 overflow-y-scroll w-full max-md:max-h-[400px]">
                   @foreach ($users as $user)
                   <div class="flex items-center w-full justify-between max-md:flex max-md:flex-col max-md:mx-auto max-md:w-full max-md:border-b-2 max-md:justify-center">
                     <div class="relative py-5 pr-6 max-md:mx-auto">
@@ -113,8 +113,8 @@
                           </div>
                         </div>
                       </div>
-                      <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100 max-md:hidden"></div>
-                      <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100 max-md:hidden"></div>
+                      {{-- <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100 max-md:hidden"></div> --}}
+                      {{-- <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100 max-md:hidden"></div> --}}
                     </div>
                     @if ($user->website_url === null && $user->instagram_url === null && $user->linkedin_url === null && $user->twitter_url === null && $user->tiktok_url === null)
                         <div class="text-blue-700 flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">No links to social media</div>
@@ -215,8 +215,8 @@
                             </div>
                           </div>
                         </div>
-                        <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100 max-md:hidden"></div>
-                        <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100 max-md:hidden"></div>
+                        {{-- <div class="absolute bottom-0 right-full h-px w-screen bg-gray-100 max-md:hidden"></div> --}}
+                        {{-- <div class="absolute bottom-0 left-0 h-px w-screen bg-gray-100 max-md:hidden"></div> --}}
                       </div>                      
                       @if ($supporter->website_url === null && $supporter->instagram_url === null && $supporter->linkedin_url === null && $supporter->twitter_url === null && $supporter->tiktok_url === null)
                         <div class="text-blue-700 flex px-5 py-8 items-center gap-x-4 max-md:w-full max-md:justify-center max-md:py-2">No links to social media</div>
