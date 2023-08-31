@@ -8,6 +8,7 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <link href="https://fonts.cdnfonts.com/css/futura-pt" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
+    <meta property="og:image" content="https://i.ibb.co/x6nW8fZ/rsz-royalfamilynames-removebg-preview.png">
     <link rel="stylesheet" href="{{ asset('assets/css/main.css') }}">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     {{-- <script src="https://www.paypalobjects.com/donate/sdk/donate-sdk.js" charset="UTF-8"></script> --}}
