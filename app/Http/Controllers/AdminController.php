@@ -70,7 +70,8 @@ class AdminController extends Controller
             'account_id' => $accountName, // Set the "Account ID"
         ]);
         $user->save();
-        return view('auth.login');
+        $request->session()->flush();
+        return redirect()->route('login');
     }
     // Show the login form
     public function showLoginForm()
