@@ -284,4 +284,8 @@ class AdminController extends Controller
             return response()->json(['quote' => 'User not found']);
         }
     }
+    public function terms()
+    {
+        return view('terms');
+    }
 }

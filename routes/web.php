@@ -20,6 +20,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 |
 */
 Route::get('/', [AdminController::class, 'homepage'])->name('homepage');
+Route::get('/terms', [AdminController::class, 'terms'])->name('terms');
 
 Route::get('/about', [AdminController::class, 'showAbout'])->name('about');
 // Show registration form and handle registration
