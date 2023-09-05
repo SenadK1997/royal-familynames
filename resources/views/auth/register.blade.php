@@ -50,7 +50,7 @@ RoyalFamilyNames - Register
         <div>
           <p class="text-gray-600 text-sm">
             By registering, you accept
-            <a href="{{ route('terms') }}" class="text-blue-500 hover:underline">Terms and Agreements</a>
+            <a target="_blank" href="{{ route('terms') }}" class="text-blue-500 hover:underline">Terms and Agreements</a>
           </p>
         </div>
         <div>
